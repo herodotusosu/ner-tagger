@@ -1,6 +1,12 @@
+#
+# A preprocessing script which takes in data from the corpus directory on brutus
+# and does its "thang". This "thang" is to extract the author title and text
+# from the latin documents stored as XML.
+#
+
 echo 'Preprocessing From Perseus XML Data:'
 
-files=$(find ../../../corpora/original/latin/canonical-latinLit/data/ -name "*-lat*.xml")
+files=$(find /home/corpora/original/latin/canonical-latinLit/data/ -name "*-lat*.xml")
 for file in $files
 do
 	author=$(cat $file | python authorExtractorXML.py)
@@ -20,7 +26,7 @@ done
 ##############################################################
 
 cd Preprocessed
-../main2.sh
+../mainPOSTagger.sh
 
 echo Done POS Tagging all requested documents
 echo Filtering Tags by Morphological Analyzer
