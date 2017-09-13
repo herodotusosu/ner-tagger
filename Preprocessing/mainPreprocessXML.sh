@@ -9,8 +9,9 @@ echo 'Preprocessing From Perseus XML Data:'
 files=$(find /home/corpora/original/latin/canonical-latinLit/data/ -name "*-lat*.xml")
 for file in $files
 do
-	author=$(cat $file | python authorExtractorXML.py)
-	title=$(cat $file | python titleExtractorXML.py)
+	author=$(python authorExtractorXML.py < $file )
+	title=$(python titleExtractorXML.py < $file )
+
 	mkdir -p Preprocessed/$author
 	cd Preprocessed/$author	
 	while [ -e $title.txt ]
@@ -19,7 +20,8 @@ do
 		title=$title$newInt
 	done
 	cd ../..
-	cat $file | python perseusExtractorXML.py | python removeDoubles.py | python holdBlanks.py > Preprocessed/$author/$title.txt
+
+	python perseusExtractorXML.py < $file | python removeDoubles.py | python holdBlanks.py > Preprocessed/$author/$title.txt
 	
 	echo $author, $title, "is ready for POS tagging and Morphological Analysis!"
 done
