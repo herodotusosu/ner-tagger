@@ -4,29 +4,6 @@
 # from the latin documents stored as XML.
 #
 
-echo 'Preprocessing From Perseus XML Data:'
-
-files=$(find /home/corpora/original/latin/canonical-latinLit/data/ -name "*-lat*.xml")
-for file in $files
-do
-	author=$(python authorExtractorXML.py < $file )
-	title=$(python titleExtractorXML.py < $file )
-
-	mkdir -p Preprocessed/$author
-	cd Preprocessed/$author	
-	while [ -e $title.txt ]
-	do
-		newInt='9'
-		title=$title$newInt
-	done
-	cd ../..
-
-	python perseusExtractorXML.py < $file | python removeDoubles.py | python holdBlanks.py > Preprocessed/$author/$title.txt
-	
-	echo $author, $title, "is ready for POS tagging and Morphological Analysis!"
-done
-##############################################################
-
 cd Preprocessed
 ../mainPOSTagger.sh
 
@@ -39,7 +16,7 @@ echo
 echo Done filtering POS tags through Morphological Analyzer
 echo
 
-echo "The Requested Texts have been Preprocessed! You can find them in the direcory erdmann/NER/Preprocessing/Preprocessed/. 
+echo "The Requested Texts have been Preprocessed! You can find them in the direcory ~/NER/Preprocessing/Preprocessed/.
 
 Please be sure to move said texts to another directory so that the Preprocessed subdirectory is empty the next time you choose to preprocess something.
 
