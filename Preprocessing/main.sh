@@ -1,8 +1,6 @@
-#
-# A preprocessing script which takes in data from the corpus directory on brutus
-# and does its "thang". This "thang" is to extract the author title and text
-# from the latin documents stored as XML.
-#
+#!/usr/bin/env bash
+
+./processCorpora.sh /home/corpora/original/latin/canonical-latinLit/data/ Preprocessed/
 
 cd Preprocessed
 ../mainPOSTagger.sh
