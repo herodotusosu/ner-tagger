@@ -1,3 +1,7 @@
 # I don't want to store the preprocessed files. At least I think I don't.
 Preprocessing/Preprocessed
 Preprocessed
+
+# Ignore compiled python files and vim files
+*.pyc
+*.*.swp
