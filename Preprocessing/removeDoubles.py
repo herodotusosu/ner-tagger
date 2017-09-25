@@ -1,15 +1,19 @@
-### run with "cat name_of_file.html | python ../perseusExtractor.py"
+#!/usr/bin/env python
+
+#
+# This script removes duplicate blank lines. If the input contains one blank
+# line after another one they are collapsed into one. This script uses stdin so,
+# input must be piped, redirected or typed.
+#
+
 import sys
-import string
 
-output = {}
-
-j = 0
+blankline_prior = False
 for line in sys.stdin:
-	if len(line.split()) != 0:
-		print line.replace('\n','')
-		j = 0
-	else:
-		if j != 1:
-			print
-		j = 1
+    if len(line.split()) != 0:
+        print line.replace('\n','')
+        blankline_prior = False
+    else:
+        if not blankline_prior:
+            print
+        blankline_prior = True
