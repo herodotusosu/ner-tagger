@@ -29,16 +29,18 @@ do
     #
     # Head to the RDRPOSTagger and use the pretrained latin models on UD to tag
     # the current corpus file.
-    cd ~/RDRPOSTagger/jSCRDRtagger
+    python ../tokenizeRDR.py --spaces $f > $f.tok
 
+    cd ~/RDRPOSTagger/jSCRDRtagger
     latin_trained_loc='../Models/UniPOS/UD_Latin'
     latin_model="${latin_trained_loc}/la-upos.RDR"
     latin_dict="${latin_trained_loc}/la-upos.DICT"
-    java RDRPOSTagger $latin_model $latin_dict $abs_text_loc
+    java RDRPOSTagger $latin_model $latin_dict $abs_text_loc.tok
     cd $cur
 
-    python ../preProcessRDR.py $f.TAGGED | python ../removeDoubles.py > $f.rdr
-    rm $f.TAGGED
+    python ../preProcessRDR.py $f.tok.TAGGED | python ../removeDoubles.py > $f.rdr
+    rm $f.tok
+    rm $f.tok.TAGGED
   done
 done
 
