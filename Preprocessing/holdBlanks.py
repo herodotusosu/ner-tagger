@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 ### run with "cat name_of_file.html | python ../perseusExtractor.py"
 import sys
 import string

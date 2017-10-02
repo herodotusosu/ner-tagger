@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import sys
 import string
 
@@ -31,8 +33,7 @@ for line in sys.stdin:
 					TG = True
 				if TG == True and chr == '>':
 					Tgo = True
-				
-				
+
 		if '</author' in line:
 			n = -1
 			for chr in line:
@@ -50,10 +51,10 @@ for line in sys.stdin:
 					AG = True
 				if AG == True and chr == '>':
 					Ago = True
-				
+
 	if 'titleStmt' in line:
 		titleStmt = True
-		
+
 title = title.replace(' ','_').replace('Machine_readable_text','')
 author = author.replace(' ','_')
 while title[-1] == '_':
@@ -65,5 +66,4 @@ if len(title) > 50:
 if len(author) > 50:
 	author = author[0:50]
 
-#print title
 print author

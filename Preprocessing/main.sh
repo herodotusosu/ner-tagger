@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# This is the main, "main" script... I think. TBD, just a placeholder for now.
+#
+
 ./processCorpora.sh /home/corpora/original/latin/canonical-latinLit/data/ Preprocessed/
 
 cd Preprocessed
