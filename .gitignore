@@ -2,6 +2,8 @@
 Preprocessing/Preprocessed
 Preprocessed
 
+venv/
+
 # Ignore compiled python files and vim files
 *.pyc
 *.*.swp
