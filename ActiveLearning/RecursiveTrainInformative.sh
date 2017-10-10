@@ -30,7 +30,7 @@ cat LeftOverUnannotated.txt | sed '/^\s*$/d' | wc -l
 ### pickles out a sentID2origUNKcounts.dat file which is dictionary where the sentIDs of the sentences will be updated constantly to match their position in LeftOverUnannotated.txt as it evolves each iteration, still allowing us to access the count for how many words were originally UNK before recursive training.
 
 echo GETTING FEATURES FOR NEWLY LIMITED UNANNOTATED CORPUS
-python ../AddingFeatures.py LeftOverUnannotated.txt domainPlaceHolder ../Gazetteers/GEOall.txt ../Gazetteers/GEOFs.txt ../Gazetteers/GEOLs.txt ../Gazetteers/GEOMWEs.txt ../Gazetteers/GEOs.txt ../Gazetteers/GEOUs.txt ../Gazetteers/PRSall.txt ../Gazetteers/PRSFs.txt ../Gazetteers/PRSLs.txt ../Gazetteers/PRSMWEs.txt ../Gazetteers/PRSs.txt ../Gazetteers/PRSUs.txt ../Gazetteers/UNKall.txt ../Gazetteers/UNKFs.txt ../Gazetteers/UNKLs.txt ../Gazetteers/UNKMWEs.txt ../Gazetteers/UNKs.txt ../Gazetteers/UNKUs.txt w2v/sims.txt w2v/simsLemmedSmall.txt words.dat > LeftOverUnannotated.ftrs
+python ../AddingFeatures.py LeftOverUnannotated.txt domainPlaceHolder ../Gazetteers/GEOall.txt ../Gazetteers/GEOFs.txt ../Gazetteers/GEOLs.txt ../Gazetteers/GEOMWEs.txt ../Gazetteers/GEOs.txt ../Gazetteers/GEOUs.txt ../Gazetteers/PRSall.txt ../Gazetteers/PRSFs.txt ../Gazetteers/PRSLs.txt ../Gazetteers/PRSMWEs.txt ../Gazetteers/PRSs.txt ../Gazetteers/PRSUs.txt ../Gazetteers/UNKall.txt ../Gazetteers/UNKFs.txt ../Gazetteers/UNKLs.txt ../Gazetteers/UNKMWEs.txt ../Gazetteers/UNKs.txt ../Gazetteers/UNKUs.txt > LeftOverUnannotated.ftrs
 rm LeftOverUnannotated.txt
 #cp LeftOverUnannotated.ftrs origLeftOverUnannotated.ftrs
 

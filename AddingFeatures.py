@@ -9,7 +9,7 @@ from model import *
 from AdFeatFuncts import *
 
 """ run with:
-	python ../AddingFeatures.py ../Preprocessing/Preprocessed/$folder/$file.pp domainPlaceHolder ../Gazetteers/GEOall.txt ../Gazetteers/GEOFs.txt ../Gazetteers/GEOLs.txt ../Gazetteers/GEOMWEs.txt ../Gazetteers/GEOs.txt ../Gazetteers/GEOUs.txt ../Gazetteers/PRSall.txt ../Gazetteers/PRSFs.txt ../Gazetteers/PRSLs.txt ../Gazetteers/PRSMWEs.txt ../Gazetteers/PRSs.txt ../Gazetteers/PRSUs.txt ../Gazetteers/UNKall.txt ../Gazetteers/UNKFs.txt ../Gazetteers/UNKLs.txt ../Gazetteers/UNKMWEs.txt ../Gazetteers/UNKs.txt ../Gazetteers/UNKUs.txt words.dat > $file.ftrs
+	python ../AddingFeatures.py ../Preprocessing/Preprocessed/$folder/$file.pp domainPlaceHolder ../Gazetteers/GEOall.txt ../Gazetteers/GEOFs.txt ../Gazetteers/GEOLs.txt ../Gazetteers/GEOMWEs.txt ../Gazetteers/GEOs.txt ../Gazetteers/GEOUs.txt ../Gazetteers/PRSall.txt ../Gazetteers/PRSFs.txt ../Gazetteers/PRSLs.txt ../Gazetteers/PRSMWEs.txt ../Gazetteers/PRSs.txt ../Gazetteers/PRSUs.txt ../Gazetteers/UNKall.txt ../Gazetteers/UNKFs.txt ../Gazetteers/UNKLs.txt ../Gazetteers/UNKMWEs.txt ../Gazetteers/UNKs.txt ../Gazetteers/UNKUs.txt > $file.ftrs
 	
 	1. <TrainingText.pp>
 	2. <domain> 
@@ -32,8 +32,6 @@ from AdFeatFuncts import *
 		18 	UNKMWE
 		19 	UNKs
 		20 	UNKUs
-
-		-1 words.dat
  """
 
 annotation = (open(sys.argv[1]).read().splitlines())
@@ -60,7 +58,6 @@ GazUNKs = (open(sys.argv[19]).read().splitlines())
 GazUNKUs = (open(sys.argv[20]).read().splitlines())
 gazList = [GazGEOall,GazGEOFs,GazGEOLs,GazGEOMWEs,GazGEOs,GazGEOUs,GazPRSall,GazPRSFs,GazPRSLs,GazPRSMWEs,GazPRSs,GazPRSUs,GazUNKall,GazUNKFs,GazUNKLs,GazUNKMWEs,GazUNKs,GazUNKUs]
 inputfile = (open(sys.argv[-1]))
-words = pickle.load(inputfile)
 
 """ initialize with word, set of lems(just lem of UNK and lemma), and set of features """
 nextLem = []
@@ -221,7 +218,6 @@ for i, line in enumerate(annotation):
 		printline = addTtlPnctCrdnmAbbrv(printline, word, lem)
 		LENNGRAM = 6 # max char Ngram length from word boundary
 		printline = addCharacterNgrams(printline,word,LENNGRAM)
-		printline = addDeTitledNonProperNouns(printline, word, words)
 		printline = addPrevNNextWord(printline, prevWord, nextWord)
 		printline = addPrevNNextLemma(printline,prevLem,nextLem)
 		printline = addAllPrevNNextPOS(printline,prevFeats,nextFeats)
