@@ -29,7 +29,7 @@ do
     #
     # Head to the RDRPOSTagger and use the pretrained latin models on UD to tag
     # the current corpus file.
-    python ../tokenizeRDR.py --spaces $f > $f.tok
+    python ../tokenizeRDR.py --lines $f > $f.tok
 
     cd ~/RDRPOSTagger/jSCRDRtagger
     latin_trained_loc='../Models/UniPOS/UD_Latin'
