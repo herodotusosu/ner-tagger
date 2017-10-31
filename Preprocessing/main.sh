@@ -7,7 +7,7 @@
 ./processCorpora.sh /home/corpora/original/latin/canonical-latinLit/data/ Preprocessed/
 
 cd Preprocessed
-../mainPOSTagger.sh
+../posTagger.sh
 
 echo Done POS Tagging all requested documents
 echo Filtering Tags by Morphological Analyzer
