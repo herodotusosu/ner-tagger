@@ -25,23 +25,23 @@ def match_tokenizations(*files):
     files: The names of files whose tokenization should be matched.
 
     Returns:
-    True if all tokenizations match and false otherwise.
+    The index of the first line where the tokens did not match.
     """
     fs = [open(f) for f in files]
 
-    for lines in itertools.izip_longest(*fs):
+    for i, lines in enumerate(itertools.izip_longest(*fs)):
         # Get the tokens for the current line in each file. If a file ran short
         # or there is a blankline in some file, that is no problem.
         tokens = [line.split('\t')[0] if line else '' for line in lines]
 
         same = reduce(lambda acc, token: acc and token == tokens[0], tokens)
         if not same:
-            return False
+            return i
 
     for f in fs:
         f.close()
 
-    return True
+    return -1
 
 
 if __name__ == "__main__":
@@ -50,8 +50,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     all_matches = True
+    line_index = -1
+    pos_tagged = []
     for root, dirs, files in os.walk(args.loc):
-        pos_tagged = []
+        del pos_tagged[:]
+
         for filename in files:
             extension = filename.split('.')[-1]
 
@@ -59,11 +62,12 @@ if __name__ == "__main__":
                 full_path = os.path.join(root, filename)
                 pos_tagged.append(full_path)
 
-        all_matches = match_tokenizations(*pos_tagged)
+        line_index = match_tokenizations(*pos_tagged)
+        all_matches = line_index < 0
         if not all_matches:
             break
 
     if not all_matches:
-        print('FAILED')
+        print('FAILED at line #{} for files {}'.format(line_index, ','.join(pos_tagged)))
     else:
         print('***PASSED***')
