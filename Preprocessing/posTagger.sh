@@ -16,31 +16,32 @@ do
   do
     abs_text_loc="$cur/$f"
 
-    ### DO i Need to replace !'s with .'s before sending to Tree Tagger?
     # TreeTagger
     #
     # Use the Latin TreeTagger than split on sentences and remove double blank
     # lines.
-    tree-tagger-latin < $f > $f.tmp
+    python ../tokenizeRDR.py --spaces $f > $f.tt_tok
+    tree-tagger-latin < $f.tt_tok > $f.tmp
     python ../preProcessTree.py $f.tmp | python ../removeDoubles.py > $f.tt
     rm $f.tmp
+    rm $f.tt_tok
 
     # RDRPOSTagger
     #
     # Head to the RDRPOSTagger and use the pretrained latin models on UD to tag
     # the current corpus file.
-    python ../tokenizeRDR.py --lines $f > $f.tok
-
+    python ../tokenizeRDR.py --lines --spaces $f > $f.rdr_tok
+    iconv -f iso-8859-1 -t utf-8 $f.rdr_tok > $f.rdr_tok.u
     cd ~/RDRPOSTagger/jSCRDRtagger
     latin_trained_loc='../Models/UniPOS/UD_Latin'
     latin_model="${latin_trained_loc}/la-upos.RDR"
     latin_dict="${latin_trained_loc}/la-upos.DICT"
-    java RDRPOSTagger $latin_model $latin_dict $abs_text_loc.tok
+    java RDRPOSTagger $latin_model $latin_dict $abs_text_loc.rdr_tok
     cd $cur
 
-    python ../preProcessRDR.py $f.tok.TAGGED | python ../removeDoubles.py > $f.rdr
-    rm $f.tok
-    rm $f.tok.TAGGED
+    python ../preProcessRDR.py $f.rdr_tok.TAGGED | python ../removeDoubles.py > $f.rdr
+    rm $f.rdr_tok
+    rm $f.rdr_tok.TAGGED
   done
 done
 

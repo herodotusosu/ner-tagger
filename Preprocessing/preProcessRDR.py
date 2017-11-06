@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 #
 # Preprocess output from the RDRPOSTagger specifically. The name of the POS
@@ -16,6 +17,17 @@ import argparse
 
 BLANK_MARKER = 'LEAVEBLANK'
 
+def single_to_double_quote(token):
+    return '"'
+
+
+token_mappings = {
+    "''": single_to_double_quote
+}
+
+
+QUESTION_TO_TICK = '�'
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('filename', help='The POS tagged file to preprocess.')
@@ -24,6 +36,7 @@ args = parser.parse_args()
 with open(args.filename, 'r') as f:
     for line in f:
         line = line.strip()
+        line = line.replace('!', '.')
         tags = line.split()
 
         for tag in tags:
@@ -31,10 +44,20 @@ with open(args.filename, 'r') as f:
             word = tag[:split_idx]
             pos = tag[split_idx + 1:]
 
-            if word == BLANK_MARKER:
-                print
-            else:
-                print('{}\t{}'.format(word, pos))
+            words = word.split(QUESTION_TO_TICK)
+            words = [word]
+
+            for word in words:
+                try:
+                    mapping = token_mappings[word]
+                    word = mapping(word)
+                except KeyError:
+                    pass
+                    
+                if word == BLANK_MARKER:
+                    print
+                else:
+                    print('{}\t{}'.format(word, pos))
 
         if len(tags) == 0:
             print

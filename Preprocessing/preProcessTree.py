@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 #
 # Do preprocessing on the Latin TreeTagger output. The two main items this
@@ -13,40 +14,36 @@
 
 import argparse
 
+IGNORE_RDR_PROBLEMS = set(['«', '»', 'Â'])
+
+SPACE = ' '
+COL_DELIMETER = '\t'
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('filename', help='The TreeTagger POS file to process.')
 args = parser.parse_args()
 
 
-CW = (open(args.filename).read().splitlines())
-# CW = sys.argv[1].splitlines()
-# CW = sys.stdin #Use this version of CW if running perseusExtractor.sh
+with open(args.filename, 'r') as f:
+    for i, line in enumerate(f):
+        line = line.strip()
+        if line:
+            line = line.replace('!', '.')
+            cols = line.split(COL_DELIMETER)
 
-for i, line in enumerate(CW):
-    line = line.replace('!','.')
-
-    # Change any blank intentions with actual blank lines.
-    if line.split()[0] == 'LEAVEBLANK':
-        print
-    else:
-        print line.replace('\n','')
-
-        if line.split()[1] == 'SENT':
-        # Print out a blank line if a sentence end and the next token is not
-        # another punctuation.
-
-            if len(CW[i + 1].split()) > 0 and CW[i + 1].split()[1]:
-                if CW[i + 1].split()[1] != 'PUN':
-                    print
-            else:
+            # Change any blank intentions with actual blank lines.
+            # TODO: WHY THE FUCK IS THERE A LEAVEMOTHERFUCKINGBLANK?
+            if cols[0] == 'LEAVEBLANK':
                 print
-        elif line.split()[1] == 'PUN':
-        # Consecutive punctuation should be separated by blank lines, except
-        # for the first two punctuation marks.
-        # TODO: Ask Alex why this is in place.
+            elif cols[0] not in IGNORE_RDR_PROBLEMS:
+                if SPACE in cols[0]:
+                    sub_words = cols[0].split(SPACE)
+                    for sub_word in sub_words:
+                        new_line_cols = [sub_word]
+                        new_line_cols.extend(cols[1:])
+                        new_line = COL_DELIMETER.join(new_line_cols)
 
-            if i > 0 and len(CW[i-1].split()) > 0 and CW[i-1].split()[1] == 'SENT':
-                print
-            elif i > 1 and len(CW[i-1].split()) > 0 and len(CW[i-2].split()) > 0 and CW[i-1].split()[1] == 'PUN' and CW[i-2].split()[1] == 'SENT':
-                print
+                        print(new_line)
+                else:
+                    print(line)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 #
 # A very crude tokenizer based to parse an input into sentences. A sentence is
@@ -15,9 +16,13 @@
 import argparse
 import string
 
+TOKEN_SEPARATORS = string.punctuation
+TOKEN_SEPARATORS += '´'
+TOKEN_SEPARATORS += '«'
+TOKEN_SEPARATORS += '»'
 
 def is_punc(s):
-    return s in string.punctuation
+    return s in TOKEN_SEPARATORS
 
 
 def add_spaces_between_punc(s):
@@ -36,7 +41,7 @@ def add_spaces_between_punc(s):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('filename', help='The file to tokenize for the RDRPOSTagger')
-parser.add_argument('--lines', help='Tokenize so that each line is a sentence.')
+parser.add_argument('--lines', help='Tokenize so that each line is a sentence.', action='store_true')
 parser.add_argument('--spaces', help='Insert spaces between words and punctuation',
                     action='store_true')
 args = parser.parse_args()
