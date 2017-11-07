@@ -3,6 +3,7 @@ Preprocessing/Preprocessed
 Preprocessed
 
 venv/
+/**/.cache/
 
 # Ignore compiled python files and vim files
 *.pyc
