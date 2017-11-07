@@ -7,18 +7,26 @@
 # has to have all temporary files still, and not just the final file.
 #
 
-import argparse
 import collections
 import itertools
-import sys
 import os
 
 
 POS_EXTENSIONS = set(['tt', 'rdr'])
+PRE_PROCESSING_LOCATION = '../../Preprocessing/Preprocessed'
 RDR_ERROR_MATCH = 'null'
 
 
 def is_ascii(s):
+    """
+    Checks if a given string is a valid ascii string.
+
+    Args:
+    s: The string to check.
+
+    Returns:
+    True if the string is a valid ascii string, and False othewise.
+    """
     try:
         s.decode('ascii')
     except UnicodeDecodeError:
@@ -33,7 +41,8 @@ def walk_canonical_names(folder, *extensions):
     given extension. The files are returned based on canonical name (the name
     before the first '.'), and by folder. So batches of files with the same
     canonical name, and extensions from the provided list will be returned on a
-    folder basis.
+    folder basis. Files that are counted must have a txt extension. The
+    canonical name will be the part before it.
 
     Args:
     folder: The folder to walk through.
@@ -50,11 +59,15 @@ def walk_canonical_names(folder, *extensions):
 
         for filename in files:
             parts = filename.split('.')
-            canonical_name, extension = parts[0], parts[-1]
+            extension = parts[-1]
+            try:
+                canonical_name = ''.join(parts[:parts.index('txt')])
 
-            if extension in extensions:
-                full_path = os.path.join(root, filename)
-                canonical_names[canonical_name].append(full_path)
+                if extension in extensions:
+                    full_path = os.path.join(root, filename)
+                    canonical_names[canonical_name].append(full_path)
+            except ValueError:
+                pass
 
         for files in canonical_names.values():
             yield files
@@ -115,48 +128,26 @@ def match_tokenizations(*files):
 
     return res
 
-def test_tokenizations():
-    pass
 
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('loc', help='The file that has the preprocessed content.')
-    args = parser.parse_args()
-
+def test_matching_tokenizations():
+    """
+    Test that all the preprocessed files are appropriately tokenized. This is
+    useful after changing around POS taggers, morphological analyzers, and want
+    to make sure that the tokens still line up. So after running the
+    preprocessing script you can check that your changes still line up.
+    """
     all_matches = True
-    line_index = -1
-    canonical_names = collections.defaultdict(list)
+    line_mismatch = -1
     failed_files = []
 
-    for root, dirs, files in os.walk(args.loc):
-        canonical_names.clear()
+    for files in walk_canonical_names(PRE_PROCESSING_LOCATION, *POS_EXTENSIONS):
+        line_mismatch = match_tokenizations(*files)
 
-        for filename in files:
-            parts = filename.split('.')
-            extension = parts[-1]
-            try:
-                canonical_name = ''.join(parts[:parts.index('txt')])
-            except ValueError:
-                print(filename)
-                sys.exit(1)
-
-            if extension in POS_EXTENSIONS:
-                full_path = os.path.join(root, filename)
-                canonical_names[canonical_name].append(full_path)
-
-        for canonical_name, pos_files in canonical_names.items():
-            line_index = match_tokenizations(*pos_files)
-            all_matches = line_index < 0
-            if not all_matches:
-                failed_files = pos_files
-                break
-
+        all_matches = line_mismatch < 0
         if not all_matches:
+            failed_files = files
             break
 
     if not all_matches:
-        print('FAILED at line #{} for files {}'.format(line_index, ','.join(failed_files)))
-    else:
-        print('***PASSED***')
+        msg = 'FAILED at line #{} for files {}'.format(line_index, ','.join(failed_files))
+    assert all_matches, msg
