@@ -20,9 +20,9 @@ do
     #
     # Use the Latin TreeTagger than split on sentences and remove double blank
     # lines.
-    python ../tokenizeRDR.py --spaces $f > $f.tt_tok
+    python ../tokenizer.py --spaces $f > $f.tt_tok
     tree-tagger-latin < $f.tt_tok > $f.tmp
-    python ../preProcessTree.py $f.tmp | python ../removeDoubles.py > $f.tt
+    python ../processTT.py $f.tmp | python ../removeDoubles.py > $f.tt
     rm $f.tmp
     rm $f.tt_tok
 
@@ -30,8 +30,9 @@ do
     #
     # Head to the RDRPOSTagger and use the pretrained latin models on UD to tag
     # the current corpus file.
-    python ../tokenizeRDR.py --lines --spaces $f > $f.rdr_tok
+    python ../tokenizer.py --lines --spaces $f > $f.rdr_tok
     iconv -f iso-8859-1 -t utf-8 $f.rdr_tok > $f.rdr_tok.u
+
     cd ~/RDRPOSTagger/jSCRDRtagger
     latin_trained_loc='../Models/UniPOS/UD_Latin'
     latin_model="${latin_trained_loc}/la-upos.RDR"
@@ -39,7 +40,7 @@ do
     java RDRPOSTagger $latin_model $latin_dict $abs_text_loc.rdr_tok
     cd $cur
 
-    python ../preProcessRDR.py $f.rdr_tok.TAGGED | python ../removeDoubles.py > $f.rdr
+    python ../processRDR.py $f.rdr_tok.TAGGED | python ../removeDoubles.py > $f.rdr
     rm $f.rdr_tok
     rm $f.rdr_tok.TAGGED
   done

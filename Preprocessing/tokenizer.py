@@ -16,10 +16,14 @@
 import argparse
 import string
 
+
 TOKEN_SEPARATORS = string.punctuation
 TOKEN_SEPARATORS += '´'
 TOKEN_SEPARATORS += '«'
 TOKEN_SEPARATORS += '»'
+
+END_PUNCTUATION = '.!?'
+
 
 def is_punc(s):
     return s in TOKEN_SEPARATORS
@@ -54,9 +58,13 @@ with open(args.filename, 'r') as f:
             last_sentence = 0
             last_end_punctuation = -1
             for i, char in enumerate(line):
-                    if char == '.' or char == '!' or char == '?':
+                    if char in END_PUNCTUATION:
                         last_end_punctuation = i
 
+                    # Consider it the end of the sentence if we are after the
+                    # last end punctuation, and there is a space after it, and
+                    # the character before the punc is lower case, and the
+                    # character after the space is upper case.
                     if (last_end_punctuation + 1 == i and char == ' ') and \
                        (last_end_punctuation > 0 and line[last_end_punctuation - 1].islower()) and \
                        (last_end_punctuation + 2 < len(line) and line[last_end_punctuation + 2].isupper()):

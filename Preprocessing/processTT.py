@@ -14,7 +14,10 @@
 
 import argparse
 
-IGNORE_RDR_PROBLEMS = set(['«', '»', 'Â'])
+
+BLANK_MARKER = 'LEAVEBLANK'
+
+IGNORE_TOKENS = set(['«', '»', 'Â'])
 
 SPACE = ' '
 COL_DELIMETER = '\t'
@@ -34,9 +37,10 @@ with open(args.filename, 'r') as f:
 
             # Change any blank intentions with actual blank lines.
             # TODO: WHY THE FUCK IS THERE A LEAVEMOTHERFUCKINGBLANK?
-            if cols[0] == 'LEAVEBLANK':
+            if cols[0] == BLANK_MARKER:
                 print
-            elif cols[0] not in IGNORE_RDR_PROBLEMS:
+            # Ignore all characters that are not appearing in the RDR output.
+            elif cols[0] not in IGNORE_TOKENS:
                 if SPACE in cols[0]:
                     sub_words = cols[0].split(SPACE)
                     for sub_word in sub_words:
