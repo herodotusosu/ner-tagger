@@ -46,7 +46,7 @@ do
   # convert to iso-8859-1 to appease crappy TreeTagger
   cp Preprocessed/$author/$title.txt Preprocessed/$author/$title.txt.conv
   iconv -f utf-8 -t iso-8859-1//TRANSLIT Preprocessed/$author/$title.txt.conv > Preprocessed/$author/$title.txt
-  #rm Preprocessed/$author/$title.txt.conv
+  rm Preprocessed/$author/$title.txt.conv
 
 	echo $author, $title, "is ready for POS tagging and Morphological Analysis!"
 done
