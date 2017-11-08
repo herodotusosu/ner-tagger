@@ -27,8 +27,15 @@ echo
 # Find latin corpora files recursively in first command line argument.
 corpora=$(find $1 -name "*-lat*.xml")
 
+idx=0
+
 for corpus in $corpora
 do
+  idx=$((idx + 1))
+  if [ $idx -lt 3 ]; then
+    continue
+  fi
+
 	author=$(python authorExtractorXML.py < $corpus)
 	title=$(python titleExtractorXML.py < $corpus)
 
@@ -49,4 +56,8 @@ do
   rm Preprocessed/$author/$title.txt.conv
 
 	echo $author, $title, "is ready for POS tagging and Morphological Analysis!"
+
+  if [ $idx -eq 6 ]; then
+    break
+  fi
 done
