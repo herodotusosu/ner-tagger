@@ -34,8 +34,11 @@ def mcnemars(test1, test2, p):
        0.025, 0.01, 0.005.
 
     Returns:
-    The results of the test with respect to the null hypothesis. If we reject
-    the null, then False is returned, and if we accept the null True is returned
+    A three tuple. The first element is the results of the test with respect to
+    the null hypothesis. If we reject the null, then False is returned, and if
+    we accept the null True is returned. The second and third elements are b,
+    and c respectively of the contingency table. This is to allow outside
+    analysis of the chi squared approximation.
     """
     b = 0 # test1 positive, and test2 negative
     c = 0 # test1 negative, and test2 positive
@@ -49,4 +52,4 @@ def mcnemars(test1, test2, p):
     chi = ((b - c) * (b - c)) / (b + c)
     threshold = CHI_SQUARED_DF_1[p]
 
-    return chi < threshold
+    return (chi < threshold, b, c)
