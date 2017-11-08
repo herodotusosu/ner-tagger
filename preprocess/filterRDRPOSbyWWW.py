@@ -6,6 +6,11 @@
 # these two analyses. The output will have each word labeled with definite and
 # possible lemmas, morphemes, and pos. Usage is as follows:
 #
+#   ./filterRDRPOSbyWWW.py file.txt.rdr file.txt.www
+#
+# Where the who files are the pos annotated file with the RDRPOSTagger and the
+# output of the morphological analysis using WWW.
+#
 
 
 import argparse
@@ -17,9 +22,13 @@ from featurestore import FeatureStore
 
 RDR_ERROR_MATCH = 'null'
 COL_DELIMETER = '\t'
+
 ANALYSIS_DELIMETER = ':'
 MORPH_FEATURE_DELIMETER = '-'
 MORPHEME_DELIMETER = '-'
+
+SINGULAR_MARKER = 'S'
+PLURAL_MARKER = 'P'
 
 
 # The different ways these POS are identified in the WWW output.
@@ -27,7 +36,7 @@ MORPHEME_DELIMETER = '-'
 NOUN_CASES = ['NOM', 'DAT', 'GEN', 'LOC', 'ACC', 'ABL', 'VOC']
 VERB_CASES = ['IND', 'SUB', 'INF', 'PPL', 'ACTIVE', 'PASSIVE', 'IMP']
 ADJ_CASES = ['POS-ADJ', 'COMP-ADJ', 'SUPER-ADJ', 'ADJ', 'POS']
-WHITE_LIST_POS = ['PROPN', 'X', 'PUNCT', 'SYM', 'PART']
+WHITE_LIST_POS = ['PROPN', 'X', 'PUNCT', 'SYM', 'PART', 'DET']
 
 
 parser = argparse.ArgumentParser()
@@ -82,6 +91,9 @@ with open(args.rdr, 'r') as rdr, open(args.www, 'r') as www:
 
                 feature_store.add_key('WWW-POT-MORPHEMES', 2)
 
+                s = True
+                p = True
+
                 for morph_analysis in morph_analyses:
                     morphology, morpheme_raw = morph_analysis.split(ANALYSIS_DELIMETER)
                     morphemes = morpheme_raw.split(MORPHEME_DELIMETER)
@@ -91,6 +103,15 @@ with open(args.rdr, 'r') as rdr, open(args.www, 'r') as www:
                     if rdr_matcher.match(pos, morphology):
                         for morpheme in morphemes:
                             feature_store.add_feature('WWW-POT-MORPHEMES', morpheme)
+
+                    morph_features = morphology.split(MORPH_FEATURE_DELIMETER)
+                    s = s and 'S' in morph_features
+                    p = s and 'P' in morph_features
+
+                if s:
+                    feature_store.add_singleton('WWW-SING', 3)
+                elif p:
+                    feature_store.add_singleton('WWW-PLUR', 3)
 
             else:
                 pos = rdr_cols[1]
