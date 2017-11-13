@@ -18,7 +18,7 @@ echo GETTING CAPPED TEST UNKS AND PRINTING NUMBER OF CAPPED TEST UNKS WHICH WE W
 python gettingTestUNKs.py train$beta.ftrs test$beta.ftrs # pickle out two models: trainWords[word]=freqInTraining &&& testUNKs[priorityLevel:1=highest,2=next,etc.][testUNK]=freqInTesting
 
 echo GETTING UNANNOTATED CORPUS
-cat ../Preprocessed/*/*.txt | python ../Preprocessing/removeDoubles.py > LeftOverUnannotated.txt # IMPORTANT - BUT MAYBE FOR FUTURE WORK!!! Consider adding step here where metadata features get added to identify author, text, editor, time period, domain/genre, etc.
+cat ../Preprocessed/*/*.txt | python ../preprocess/removeDoubles.py > LeftOverUnannotated.txt # IMPORTANT - BUT MAYBE FOR FUTURE WORK!!! Consider adding step here where metadata features get added to identify author, text, editor, time period, domain/genre, etc.
 echo ORIGINAL LENGTH WAS
 cat LeftOverUnannotated.txt | sed '/^\s*$/d' | wc -l
 

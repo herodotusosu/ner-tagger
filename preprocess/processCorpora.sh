@@ -32,7 +32,7 @@ idx=0
 for corpus in $corpora
 do
   idx=$((idx + 1))
-  if [ $idx -lt 3 ]; then
+  if [ $idx -lt -1 ]; then
     continue
   fi
 
@@ -57,7 +57,7 @@ do
 
 	echo $author, $title, "is ready for POS tagging and Morphological Analysis!"
 
-  if [ $idx -eq 6 ]; then
+  if [ $idx -eq 1000000000 ]; then
     break
   fi
 done

@@ -6,10 +6,9 @@ do
   for f in $d*.txt
   do
     echo $f
-    cat $f.rdr | python ../removeIchars.py > $f.temp_rdr
-    cat $f.tt | python ../removeIchars.py > $f.temp_tt
+    cat $f.rdr | python ../removeIchars.py > $f.temp
     cd /usr/local/words
-    python mainExtractPossiblePOSTagsEXP2.py ~/NER/preprocess/Preprocessed/$f.temp_rdr > ~/NER/preprocess/Preprocessed/$f.WWW
+    python mainExtractPossiblePOSTagsEXP2.py ~/NER/preprocess/Preprocessed/$f.temp > ~/NER/preprocess/Preprocessed/$f.WWW
     cd ~/NER/preprocess/Preprocessed/
 
     echo William Whitakers Words is Done Analyzing $f
@@ -17,13 +16,11 @@ do
     echo
 
     ####################
-    python ../filterRDRPOSbyWWW.py $f.temp_rdr $f.WWW > $f.final_rdr
-    python ../filterPOSbyWWW2.py $f.temp_tt $f.WWW > $f.final_tt
-    cat $f.final_rdr | python ../removeColons4crf.py > $f.no_colon_rdr
-    # rm $f.WWW
-    # rm $f.final
-    rm $f.temp_rdr
-    rm $f.temp_tt
+    python ../filterRDRPOSbyWWW.py $f.temp $f.WWW > $f.coloned
+    cat $f.coloned | python ../removeColons4crf.py > $f.final
+    rm $f.WWW
+    rm $f.coloned
+    rm $f.temp
 
     # python ../addMetaDataFeats.py $f $author $title > $f.txt
     # mv  $f.txt $f
