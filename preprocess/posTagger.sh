@@ -14,35 +14,41 @@ do
   echo $d
   for f in $d*.txt
   do
+    # convert to iso-8859-1 to appease crappy TreeTagger
+    cp $f $f.conv
+    iconv -f utf-8 -t iso-8859-1//TRANSLIT $f.conv > $f
+    .././sentize.py $f > $f.sent
+    .././utf8-tokenize.perl -s $f.sent > $f.tok
+    rm $f.sent
     abs_text_loc="$cur/$f"
 
     # TreeTagger
     #
     # Use the Latin TreeTagger than split on sentences and remove double blank
     # lines.
-    python ../tokenizer.py --spaces $f > $f.tt_tok
-    tree-tagger-latin < $f.tt_tok > $f.tmp
-    python ../processTT.py $f.tmp | python ../removeDoubles.py > $f.tt
+    tree-tagger-latin < $f.tok > $f.tt.tagged
+    python ../processTT.py $f.tt.tagged | python ../removeDoubles.py > $f.tmp
+    .././tokenMapping.py $f.tmp > $f.tt
+    rm $f.tt.taggged
     rm $f.tmp
-    rm $f.tt_tok
 
     # RDRPOSTagger
     #
     # Head to the RDRPOSTagger and use the pretrained latin models on UD to tag
     # the current corpus file.
-    python ../tokenizer.py --lines --spaces $f > $f.rdr_tok
-    iconv -f iso-8859-1 -t utf-8 $f.rdr_tok > $f.rdr_tok.u
-
     cd ~/RDRPOSTagger/jSCRDRtagger
     latin_trained_loc='../Models/UniPOS/UD_Latin'
     latin_model="${latin_trained_loc}/la-upos.RDR"
     latin_dict="${latin_trained_loc}/la-upos.DICT"
-    java RDRPOSTagger $latin_model $latin_dict $abs_text_loc.rdr_tok
+    java RDRPOSTagger $latin_model $latin_dict $abs_text_loc.tok
     cd $cur
 
-    python ../processRDR.py $f.rdr_tok.TAGGED | python ../removeDoubles.py > $f.rdr
-    rm $f.rdr_tok
-    rm $f.rdr_tok.TAGGED
+    python ../processRDR.py $f.tok.TAGGED | python ../removeDoubles.py > $f.tmp
+    .././tokenMapping.py $f.tmp > $f.rdr
+    rm $f.tmp
+    rm $f.tok.TAGGED
+
+    # rm $f.tok
   done
 done
 
