@@ -15,9 +15,8 @@ do
   for f in $d*.txt
   do
     # convert to iso-8859-1 to appease crappy TreeTagger
-    cp $f $f.conv
-    iconv -f utf-8 -t iso-8859-1//TRANSLIT $f.conv > $f
-    .././sentize.py $f > $f.sent
+    iconv -f utf-8 -t iso-8859-1//TRANSLIT $f > $f.conv
+    .././sentize.py $f.conv > $f.sent
     .././utf8-tokenize.perl -s $f.sent > $f.tok
     rm $f.sent
     abs_text_loc="$cur/$f"
