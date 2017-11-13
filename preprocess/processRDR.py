@@ -6,24 +6,11 @@
 # consists of removing the LEAVEBLANK lines, and also having one word per line.
 # The output of the RDRPOSTagger has multiple words per line, it is a matter of
 # putting them on separate lines.
-#
 # Usage of this script is as follows:
 #   ./preProcessRDR.py filename.rdr > processed.rdr
 #
 
 import argparse
-
-
-BLANK_MARKER = 'LEAVEBLANK'
-
-
-def single_to_double_quote(token):
-    return '"'
-
-
-token_mappings = {
-    "'": single_to_double_quote
-}
 
 
 parser = argparse.ArgumentParser()
@@ -34,7 +21,6 @@ args = parser.parse_args()
 with open(args.filename, 'r') as f:
     for line in f:
         line = line.strip()
-        line = line.replace('!', '.')
         tags = line.split()
 
         for tag in tags:
@@ -42,16 +28,6 @@ with open(args.filename, 'r') as f:
             word = tag[:split_idx]
             pos = tag[split_idx + 1:]
 
-            try:
-                mapping = token_mappings[word]
-                word = mapping(word)
-            except KeyError:
-                pass
-
-            if word == BLANK_MARKER:
-                print
-            else:
-                print('{}\t{}'.format(word, pos))
-
+            print('{}\t{}'.format(word, pos))
         if len(tags) == 0:
             print
