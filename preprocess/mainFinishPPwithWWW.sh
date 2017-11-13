@@ -16,10 +16,8 @@ do
     echo
 
     ####################
-    python ../filterRDRPOSbyWWW.py $f.temp $f.WWW > $f.coloned
-    cat $f.coloned | python ../removeColons4crf.py > $f.final
+    python ../filterRDRPOSbyWWW.py $f.temp $f.WWW > $f.final
     rm $f.WWW
-    rm $f.coloned
     rm $f.temp
 
     # python ../addMetaDataFeats.py $f $author $title > $f.txt
