@@ -22,7 +22,7 @@ def single_to_double_quote(token):
 
 
 token_mappings = {
-    "''": single_to_double_quote
+    "'": single_to_double_quote
 }
 
 
