@@ -13,7 +13,7 @@ import os
 
 
 POS_EXTENSIONS = set(['tt', 'rdr'])
-PRE_PROCESSING_LOCATION = '../../Preprocessing/Preprocessed'
+PRE_PROCESSING_LOCATION = '../../preprocess/Preprocessed'
 RDR_ERROR_MATCH = 'null'
 
 
