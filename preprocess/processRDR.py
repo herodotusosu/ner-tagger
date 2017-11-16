@@ -29,5 +29,3 @@ with open(args.filename, 'r') as f:
             pos = tag[split_idx + 1:]
 
             print('{}\t{}'.format(word, pos))
-        if len(tags) == 0:
-            print

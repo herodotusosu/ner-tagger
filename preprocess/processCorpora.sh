@@ -27,32 +27,23 @@ echo
 # Find latin corpora files recursively in first command line argument.
 corpora=$(find $1 -name "*-lat*.xml")
 
-idx=0
-
 for corpus in $corpora
 do
-  idx=$((idx + 1))
-  if [ $idx -lt -1 ]; then
-    continue
-  fi
+  author=$(python authorExtractorXML.py < $corpus)
+  title=$(python titleExtractorXML.py < $corpus)
 
-	author=$(python authorExtractorXML.py < $corpus)
-	title=$(python titleExtractorXML.py < $corpus)
+  mkdir -p $cur/$2/$author
+  cd $cur/$2/$author
+  while [ -e $title.txt ]
+  do
+    newInt='9'
+    title=$title$newInt
+  done
+  cd $cur
 
-	mkdir -p $cur/$2/$author
-	cd $cur/$2/$author
-	while [ -e $title.txt ]
-	do
-		newInt='9'
-		title=$title$newInt
-	done
-	cd $cur
+  python perseusExtractorXML.py < $corpus | python removeDoubles.py > Preprocessed/$author/$title.txt.raw
+  ./preProcessCorpora.py Preprocessed/$author/$title.txt.raw > Preprocessed/$author/$title.txt
+  rm Preprocessed/$author/$title.txt.raw
 
-	python perseusExtractorXML.py < $corpus | python removeDoubles.py > Preprocessed/$author/$title.txt
-
-	echo $author, $title, "is ready for POS tagging and Morphological Analysis!"
-
-  if [ $idx -eq 1000000000 ]; then
-    break
-  fi
+  echo $author, $title, "is ready for POS tagging and Morphological Analysis!"
 done
