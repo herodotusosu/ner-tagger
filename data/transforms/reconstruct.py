@@ -15,7 +15,7 @@ import argparse
 
 
 COL_DELIMITER = '\t'
-K = 5
+K = 2000
 
 TOKEN_MAPPINGS = {
     '<COLON>': ':'
