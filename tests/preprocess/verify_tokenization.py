@@ -137,17 +137,14 @@ def test_matching_tokenizations():
     preprocessing script you can check that your changes still line up.
     """
     all_matches = True
-    line_mismatch = -1
-    failed_files = []
+    failures = []
 
     for files in walk_canonical_names(PRE_PROCESSING_LOCATION, *POS_EXTENSIONS):
         line_mismatch = match_tokenizations(*files)
+        if line_mismatch < 0:
+            failures.append('{} not okay at line {}'.format(','.join(files), line_mismatch))
 
-        all_matches = line_mismatch < 0
-        if not all_matches:
-            failed_files = files
-            break
+        all_matches = all_matches and line_mismatch < 0
 
-    if not all_matches:
-        msg = 'FAILED at line #{} for files {}'.format(line_index, ','.join(failed_files))
+    
     assert all_matches, msg
