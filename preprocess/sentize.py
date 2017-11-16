@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 #
 # A very crude tokenizer based to parse an input into sentences. A sentence is
