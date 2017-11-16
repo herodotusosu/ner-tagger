@@ -5,7 +5,9 @@
 # tagged file is passed in as the first command line argument. Preprocessing
 # consists of removing the LEAVEBLANK lines, and also having one word per line.
 # The output of the RDRPOSTagger has multiple words per line, it is a matter of
-# putting them on separate lines.
+# putting them on separate lines. Note that this script does not conserve blank
+# lines.
+#
 # Usage of this script is as follows:
 #   ./preProcessRDR.py filename.rdr > processed.rdr
 #

@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 
 #
-# TODO:
+# Post processing on the pos tagged output. This basically maps the POS tagged
+# tokens to something else if necessary. For example, ':' is mapped to '<COLON>',
+# two double quotes are mapped to a single double quote and so on.
+#
+# Usage:
+#   ./tokenMapping.py input.txt > output.txt
 #
 
 import argparse
@@ -16,7 +21,7 @@ def colon_to_marker(token):
 
 
 def excl_to_period(token):
-    return '!'
+    return '.'
 
 
 TOKEN_MAPPINGS = {

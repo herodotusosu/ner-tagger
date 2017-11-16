@@ -32,5 +32,3 @@ with open(args.filename, 'r') as f:
             cols = line.split(COL_DELIMETER)
             if cols[0] not in IGNORE_TOKENS:
                 print(line)
-        else:
-            print

@@ -11,6 +11,9 @@
 # end punctuation, since it is likely an abbreviation for a name in Latin. The
 # next character after the end punctuation and space also has to be upper case.
 #
+# Usage:
+#   ./sentize.py input.txt > output.txt
+#
 
 import argparse
 
