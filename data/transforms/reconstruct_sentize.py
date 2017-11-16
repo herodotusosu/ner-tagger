@@ -15,8 +15,6 @@ import argparse
 
 
 COL_DELIMITER = '\t'
-K = 2000
-
 TOKEN_MAPPINGS = {
     '<COLON>': ':'
 }
@@ -42,10 +40,9 @@ with open(args.filename, 'r') as f:
                 pass
 
             next_tokens.append(token)
-
-        if len(next_tokens) >= K:
+        else:
             reconstructed_line = ' '.join(next_tokens)
             del next_tokens[:]
 
             encoded = reconstructed_line.encode('utf-8')
-            print encoded,
+            print(encoded)
