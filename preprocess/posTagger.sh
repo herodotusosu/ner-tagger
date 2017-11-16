@@ -17,9 +17,11 @@ do
     # convert to iso-8859-1 to appease crappy TreeTagger
     iconv -f utf-8 -t iso-8859-1//TRANSLIT $f > $f.conv
     .././sentize.py $f.conv > $f.sent
-    .././utf8-tokenize.perl -s $f.sent > $f.tok
+    .././tokenize.py $f.sent > $f.tok
+    rm $f.conv
     rm $f.sent
     abs_text_loc="$cur/$f"
+
 
     # TreeTagger
     #
@@ -28,7 +30,7 @@ do
     tree-tagger-latin < $f.tok > $f.tt.tagged
     python ../processTT.py $f.tt.tagged | python ../removeDoubles.py > $f.tmp
     .././tokenMapping.py $f.tmp > $f.tt
-    rm $f.tt.taggged
+    rm $f.tt.tagged
     rm $f.tmp
 
     # RDRPOSTagger
@@ -46,8 +48,6 @@ do
     .././tokenMapping.py $f.tmp > $f.rdr
     rm $f.tmp
     rm $f.tok.TAGGED
-
-    # rm $f.tok
   done
 done
 
