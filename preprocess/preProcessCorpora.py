@@ -20,7 +20,24 @@ import sys
 import re
 
 
-REMOVE_CHARS = u'[〈〉]'
+CHAR_MAPPINGS = {
+    '〈': '',
+    '〉': '',
+    unichr(0xA0): ' '
+}
+
+def map_chars(s):
+    new_chars = []
+    for char in s:
+        try:
+            char = CHAR_MAPPINGS[char]
+        except KeyError:
+            pass
+
+        new_chars.append(char)
+
+    new_s = ''.join(new_chars)
+    return new_s
 
 
 parser = argparse.ArgumentParser()
@@ -31,8 +48,6 @@ args = parser.parse_args()
 with open(args.filename, 'r') as f:
     for line in f:
         decoded = line.decode('utf-8').strip()
-
-        # Remove the characters we don't want.
-        decoded = re.sub(REMOVE_CHARS, '', decoded)
+        decoded = map_chars(decoded)
         encoded = decoded.encode('utf-8')
         print(encoded)
