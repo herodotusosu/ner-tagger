@@ -1,19 +1,12 @@
 #!/usr/bin/env bash
 
 #
-# This is the main, "main" script... I think. TBD, just a placeholder for now.
+# TODO
 #
 
 ./processCorpora.sh /home/corpora/original/latin/canonical-latinLit/data/ Preprocessed/
+./analyzeCorpora.sh Preprocessed/
 
-cd Preprocessed
-../posTagger.sh
-
-echo Done POS Tagging all requested documents
-echo Filtering Tags by Morphological Analyzer
-echo
-
-../mainFinishPPwithWWW.sh
 
 echo Done filtering POS tags through Morphological Analyzer
 echo

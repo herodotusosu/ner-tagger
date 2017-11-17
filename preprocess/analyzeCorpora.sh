@@ -9,12 +9,12 @@
 
 cur=$(pwd)
 
-for d in */
+for d in $1/*
 do
   echo $d
-  for f in $d*.txt
+  for f in $d/*.txt
   do
-    .././analyze.sh $f
+    ./analyze.sh $f
   done
 done
 
