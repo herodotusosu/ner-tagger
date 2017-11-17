@@ -4,8 +4,13 @@
 # Given a folder of preprocessed results, i.e. it has subfolders of authors,
 # that have the collection of works of that author, and each file's extension is
 # marked for what processing was done on it. The preprocessing folder obviously
-# has to have all temporary files still, and not just the final file.
+# has to have some temporary files still, and not just the final file. This
+# test assumes the preprocessed files are in ../../preprocess/Preprocessed.
 #
+# This is good to run after changing the preprocessing pipeline and you still
+# want to make sure different analyses tokenizations line up.
+#
+
 
 import collections
 import itertools
