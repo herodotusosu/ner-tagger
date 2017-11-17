@@ -9,6 +9,11 @@
 import itertools
 
 
+aliases = {
+    'Chianti': 'cenatio'
+}
+
+
 def is_ascii(s):
     """
     Checks if a given string is a valid ascii string.
@@ -27,7 +32,7 @@ def is_ascii(s):
     return True
 
 
-def match_tokenizations(*files):
+def match_tokenizations(*files, **kwargs):
     """
     Verifies that the tokenization for the given files is the same. Each token
     in the preprocessed file is on its own line and sentences are separated by
@@ -39,6 +44,10 @@ def match_tokenizations(*files):
     Returns:
     The index of the first line where the tokens did not match.
     """
+    col_indices = kwargs.get('col_indices')
+    if col_indices is None:
+        col_indices = [1] * len(files)
+
     fs = [open(f) for f in files]
 
     res = -1
@@ -50,16 +59,18 @@ def match_tokenizations(*files):
         # these lines for now as long as everything else matches.
         tokens = []
         error_on_line = False
-        for line in lines:
+        for j, line in enumerate(lines):
             line = line.strip()
 
             if line:
                 cols = line.split('\t')
-                token = cols[1]
+                index = col_indices[j]
+                token = cols[index]
+
                 if is_ascii(token):
-                    if token == '\'':
-                        token = '"'
-                    tokens.append(token)
+                    if token in aliases:
+                        token = aliases[token]
+                    tokens.append(token.lower())
                 else:
                     error_on_line = True
                     break
@@ -81,14 +92,18 @@ def match_tokenizations(*files):
     return res
 
 
-def test_analyzed_tokenizations(file1, file2):
+def test_tokenizations(file1, column1, file2, column2):
     """
     Test that all the preprocessed files are appropriately tokenized. This is
     useful after changing around POS taggers, morphological analyzers, and want
     to make sure that the tokens still line up. So after running the
     preprocessing script you can check that your changes still line up.
     """
-    line_mismatch = match_tokenizations(file1, file2)
+    if column1 and column2:
+        indices = (int(column1), int(column2))
+    else:
+        indices = None
+    line_mismatch = match_tokenizations(file1, file2, col_indices=indices)
     matches = line_mismatch < 0
 
     if not matches:
