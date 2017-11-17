@@ -12,6 +12,9 @@
 import argparse
 
 
+BLANKMARKER = 'LEAVEBLANK'
+
+
 def single_to_double_quote(token):
     return '"'
 
@@ -51,7 +54,10 @@ with open(args.filename, 'r') as f:
             except KeyError:
                 pass
 
-            new_line = COL_DELIMITER.join(cols)
-            print(new_line)
+            if token == BLANKMARKER:
+                print
+            else:
+                new_line = COL_DELIMITER.join(cols)
+                print(new_line)
         else:
             print

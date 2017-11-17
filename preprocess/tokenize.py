@@ -17,7 +17,7 @@ import argparse
 import re
 
 
-PUNCTUATION = '<>.?!-"\'[](){}¿¡„†‡‹‘’“”•–—›»«`%;:,„\\‰'
+PUNCTUATION = u'<>.?!-"\'[](){}¿¡„†‡‹‘’“”•–—›»«`%;:,„\\‰'
 SPACE = ' '
 
 
@@ -45,6 +45,7 @@ args = parser.parse_args()
 
 with open(args.filename, 'r') as f:
     for line in f:
-        line = line.strip()
-        line = space_punc(line)
-        print(line)
+        decoded = line.decode('utf-8').strip()
+        decoded = space_punc(decoded)
+        encoded = decoded.encode('utf-8')
+        print(encoded)

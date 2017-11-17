@@ -21,6 +21,7 @@ import argparse
 OPEN_BRACKETS = '([{"'
 CLOSED_BRACKETS = '([{"'
 END_PUNCTUATION = '.!?'
+BLANKMARKER = 'LEAVEBLANK'
 
 
 def is_end_punc(s):
@@ -60,6 +61,7 @@ with open(args.filename, 'r') as f:
                     sentence = raw
 
                     print(sentence)
+                    print(BLANKMARKER)
 
                     # Move last_sentence to where the start of the next sentence
                     # would start assuming a space between the period and next
@@ -71,5 +73,4 @@ with open(args.filename, 'r') as f:
             # last character.
             remainder = line[last_sentence:]
             print(remainder)
-        else:
-            print
+            print(BLANKMARKER)
