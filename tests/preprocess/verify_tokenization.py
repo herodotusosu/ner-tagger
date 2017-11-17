@@ -141,10 +141,11 @@ def test_matching_tokenizations():
 
     for files in walk_canonical_names(PRE_PROCESSING_LOCATION, *POS_EXTENSIONS):
         line_mismatch = match_tokenizations(*files)
-        if line_mismatch < 0:
+        if line_mismatch >= 0:
             failures.append('{} not okay at line {}'.format(','.join(files), line_mismatch))
 
         all_matches = all_matches and line_mismatch < 0
 
     
+    msg = '\n'.join(failures)
     assert all_matches, msg
