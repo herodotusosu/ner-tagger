@@ -7,15 +7,18 @@
 # one available option flag, n. If set, the input file will not be sentized and
 # tokenized, and will be used as is in the analysis.
 #
+# Note that the -n flag must be before the filename!
+#
 # Usage:
-#   ./analyze.sh input.txt -n
+#   ./analyze.sh [-n] input.txt
 #
 
 cur=$(pwd)
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 no_tok=false
 
-while getopts ":n" opt; do
+while getopts "n" opt
+do
   case $opt in
     n)
       no_tok=true
@@ -23,10 +26,15 @@ while getopts ":n" opt; do
   esac
 done
 
-if  [ !$no_tok ]; then
-  $SCRIPTPATH/./sentize.py $1 > $1.sent
-  $SCRIPTPATH/./tokenize.py $1.sent > $1.tok
-  rm $1.sent
+f=${@:$OPTIND:1}
+if  [ ! $no_tok ]; then
+  $SCRIPTPATH/./sentize.py $f > $f.sent
+  $SCRIPTPATH/./tokenize.py $f.sent > $f.tok
+  rm $f.sent
+
+  tokenized_file=$f.tok
+else
+  tokenized_file=$f
 fi
 
 
@@ -34,42 +42,42 @@ fi
 #
 # Use the Latin TreeTagger than split on sentences and remove double blank
 # lines.
-tree-tagger-latin < $1.tok > $1.tt.tagged
-$SCRIPTPATH/./tokenMapping.py $1.tt.tagged > $1.tt
-rm $1.tt.tagged
-rm $1.tmp
+tree-tagger-latin < $tokenized_file > $f.tt.tagged
+$SCRIPTPATH/./tokenMapping.py $f.tt.tagged > $f.tt
+rm $f.tt.tagged
 
 
 # RDRPOSTagger
 #
 # Head to the RDRPOSTagger and use the pretrained latin models on UD to tag
 # the current corpus file.
-abs_text_loc="$cur/$1"
+abs_tok_loc="$cur/$tokenized_file"
 cd ~/RDRPOSTagger/jSCRDRtagger
 latin_trained_loc='../Models/UniPOS/UD_Latin'
 latin_model="${latin_trained_loc}/la-upos.RDR"
 latin_dict="${latin_trained_loc}/la-upos.DICT"
-java RDRPOSTagger $latin_model $latin_dict $abs_text_loc.tok
+java RDRPOSTagger $latin_model $latin_dict $abs_tok_loc
 cd $cur
 
-python $SCRIPTPATH/processRDR.py $1.tok.TAGGED | python $SCRIPTPATH/removeDoubles.py > $1.tmp
-$SCRIPTPATH/./tokenMapping.py $1.tmp > $1.rdr
-rm $1.tmp
-rm $1.tok.TAGGED
+python $SCRIPTPATH/processRDR.py $tokenized_file.TAGGED > $f.tmp
+$SCRIPTPATH/./tokenMapping.py $f.tmp > $f.rdr
+rm $f.tmp
+rm $tokenized_file.TAGGED
 
 
 # William Whitteker's Words
 #
-# Now time for morphological analysis that will be combined with
-#cat $1.rdr | python $SCRIPTPATH/removeIchars.py > $1.temp
-#cd /usr/local/words
-#python mainExtractPossiblePOSTagsEXP2.py $cur/$1.temp > $cur/$1.WWW
-#cd $cur
-#
-#echo William Whitakers Words is Done Analyzing $1
-#echo Now to filter POS tags by Analysis
-#echo
-#
-#python $SCRIPTPATH/filterRDRPOSbyWWW.py $1.temp $1.WWW > $1.final
-##rm $1.WWW
-##rm $1.temp
+# Now time for morphological analysis that will be combined with the POS tagging
+# output.
+cat $f.rdr | python $SCRIPTPATH/removeIchars.py > $f.temp
+cd /usr/local/words
+python mainExtractPossiblePOSTagsEXP2.py $cur/$f.temp > $cur/$f.WWW
+cd $cur
+
+echo William Whitakers Words is Done Analyzing $f
+echo Now to filter POS tags by Analysis
+echo
+
+python $SCRIPTPATH/filterRDRPOSbyWWW.py $f.temp $f.WWW > $f.final
+rm $f.WWW
+rm $f.temp
