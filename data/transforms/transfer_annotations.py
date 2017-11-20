@@ -9,7 +9,7 @@
 # two files must be exactly aligned, token for token.
 #
 # Usage:
-#   ./transfer_annotations.py first.txt second.txt > output.txt
+#   ./transfer_annotations.py source.txt dest.txt > output.txt
 #
 
 import argparse
@@ -19,8 +19,8 @@ COL_DELIMITER = '\t'
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('source', file='The file with the original annotations.')
-parser.add_argument('dest', file='The file to transfer the annotations to.')
+parser.add_argument('source', help='The file with the original annotations.')
+parser.add_argument('dest', help='The file to transfer the annotations to.')
 args = parser.parse_args()
 
 
