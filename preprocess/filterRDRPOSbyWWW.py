@@ -4,8 +4,9 @@
 # This script takes in a file tagged by the RDRPOSTagger and a file tagged by
 # a morphological analyzer, in this case WWW, and creates an output that matches
 # these two analyses. The output will have each word labeled with definite and
-# possible lemmas, morphemes, and pos. Usage is as follows:
+# possible lemmas, morphemes, and pos.
 #
+# Usage:
 #   ./filterRDRPOSbyWWW.py file.txt.rdr file.txt.www
 #
 # Where the who files are the pos annotated file with the RDRPOSTagger and the
