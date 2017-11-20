@@ -1,35 +1,18 @@
 #!/usr/bin/env python
 
 #
-# Given two files, determine if there are tokenizations are equivalent and if
-# they aren't where do they differ.
+# Given two files, determine if their tokenizations are equivalent and if they
+# aren't, on what line do they differ. This file is flexible in that tokens can
+# be in any column. If either file is different from the first column, both must
+# be specified. Usage can be seen below.
+#
+# Usage:
+#   pytest test_tokenizations.py [--file1 file1.txt] [--file2 file2.txt] \
+#   [--col1 1] [--col2 1]
 #
 
 
 import itertools
-
-
-aliases = {
-    'Chianti': 'cenatio'
-}
-
-
-def is_ascii(s):
-    """
-    Checks if a given string is a valid ascii string.
-
-    Args:
-    s: The string to check.
-
-    Returns:
-    True if the string is a valid ascii string, and False othewise.
-    """
-    try:
-        s.decode('ascii')
-    except UnicodeDecodeError:
-        return False
-
-    return True
 
 
 def match_tokenizations(*files, **kwargs):
@@ -58,7 +41,6 @@ def match_tokenizations(*files, **kwargs):
         # for some words, and no token is provided in the output. We can ignore
         # these lines for now as long as everything else matches.
         tokens = []
-        error_on_line = False
         for j, line in enumerate(lines):
             line = line.strip()
 
@@ -67,19 +49,9 @@ def match_tokenizations(*files, **kwargs):
                 index = col_indices[j]
                 token = cols[index]
 
-                if is_ascii(token):
-                    if token in aliases:
-                        token = aliases[token]
-                    tokens.append(token.lower())
-                else:
-                    error_on_line = True
-                    break
-                    
+                tokens.append(token)
             else:
                 tokens.append('')
-
-        if error_on_line:
-            continue
 
         same = reduce(lambda acc, token: acc and token == tokens[0], tokens, True)
         if not same:
