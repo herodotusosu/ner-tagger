@@ -50,3 +50,11 @@ with open(args.filename, 'r') as f:
             encoded = reconstructed_line.encode('utf-8')
             print(encoded)
             print(BLANKMARKER)
+
+    # At the end we still have to print out what we have collected.
+    if next_tokens:
+        reconstructed_line = ' '.join(next_tokens)
+        del next_tokens[:]
+
+        encoded = reconstructed_line.encode('utf-8')
+        print(encoded)
