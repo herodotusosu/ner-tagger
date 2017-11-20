@@ -5,16 +5,19 @@
 # already tokenized. This is done because there is no actual way to recover the
 # authentic source from the raw corpora Perseus data. But we can reconstruct an
 # approximation to yield approximate analyses. The parts that matter most likely
-# won't change.
+# won't change. The reconstruction will be partitioned by sentence as
+# partitioned in the input file, where blank lines separate sentences, and will
+# already be tokenized, with tokens separated by spaces.
 #
 # Usage:
-#   ./reconstruct.py input.txt > output.txt
+#   ./reconstruct_sent_tok.py input.txt > output.txt
 #
 
 import argparse
 
 
 COL_DELIMITER = '\t'
+BLANKMARKER = 'LEAVEBLANK'
 TOKEN_MAPPINGS = {
     '<COLON>': ':'
 }
@@ -46,3 +49,4 @@ with open(args.filename, 'r') as f:
 
             encoded = reconstructed_line.encode('utf-8')
             print(encoded)
+            print(BLANKMARKER)
