@@ -10382,7 +10382,9 @@ PRSU	Helene	POSft-lemma=<unknown>	POSft-lemma=hele	domain-author-P._Ovidius_Naso
 0	stupor	POSft-N	POSft-nom	POSft-defMorpheme=stupor	POSft-potMorpheme=stupor	POSft-lemma=stupor	num-sing	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 0	hic	POSft-DIMOS	POSft-defMorpheme=h	POSft-defMorpheme=ic	POSft-potMorpheme=h	POSft-potMorpheme=ic	POSft-lemma=hic	num-sing	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 0	,	POSft-PUN	POSft-lemma=,	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
-PRSU	MenelaÉPOSft-lemma=<unknown>	POSft-lemma=menelaÊ0	¯POSft-lemma=<unknown>	POSft-lemma=´0	,	POSft-PUN	POSft-lemma=,	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
+PRSU	MenelaÉ	POSft-lemma=<unknown>	POSft-lemma=menelaÊ
+0	´	POSft-lemma=<unknown>	POSft-lemma=´
+0	,	POSft-PUN	POSft-lemma=,	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 0	fuit	POSft-ESSE	POSft-IND	POSft-defMorpheme=fu	POSft-defMorpheme=it	POSft-potMorpheme=fu	POSft-potMorpheme=it	POSft-lemma=sum	num-sing	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 0	?	POSft-SENT	POSft-lemma=?	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 
@@ -16295,7 +16297,9 @@ PRSU	Helene	POSft-lemma=<unknown>	POSft-lemma=hele	domain-author-P._Ovidius_Naso
 0	non	POSft-ADV	POSft-defMorpheme=non	POSft-potMorpheme=non	POSft-lemma=non	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 0	stulte	POSft-ADJ	POSft-PSTV	POSft-defMorpheme=stult	POSft-defMorpheme=e	POSft-potMorpheme=stult	POSft-potMorpheme=e	POSft-lemma=stultus	num-sing	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 0	,	POSft-PUN	POSft-lemma=,	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
-PRSU	MenelaÉPOSft-lemma=<unknown>	POSft-lemma=menelaÊ0	¯POSft-lemma=<unknown>	POSft-lemma=´0	,	POSft-PUN	POSft-lemma=,	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
+PRSU	MenelaÉ	POSft-lemma=<unknown>	POSft-lemma=menelaÊ
+0	´	POSft-lemma=<unknown>	POSft-lemma=´
+0	,	POSft-PUN	POSft-lemma=,	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 0	reposcis	POSft-V	POSft-IND	POSft-defMorpheme=reposc	POSft-defMorpheme=is	POSft-potMorpheme=reposc	POSft-potMorpheme=is	POSft-lemma=reposco	num-sing	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 0	,	POSft-PUN	POSft-lemma=,	domain-author-P._Ovidius_Naso	domain-title-RestOfArt_of_Love
 
