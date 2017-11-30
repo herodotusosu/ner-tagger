@@ -20,19 +20,18 @@ LEMMA_FEATURE_LABEL = 'POSft-lemma='
 
 
 def wordform_to_lemma(line):
-    return line.split()[1]
+    return [line.split()[1]]
 
 
-def extract_lemma_feat(line):
+def extract_lemma_feats(line):
     cols = line.split(COL_DELIMITER)
 
-    lemma_feat = None
+    lemma_feats = []
     for col in cols:
         if col.startswith(LEMMA_FEATURE_LABEL):
-            lemma_feat = col[len(LEMMA_FEATURE_LABEL):]
-            break
+            lemma_feats.append(col[len(LEMMA_FEATURE_LABEL):])
 
-    return lemma_feat
+    return lemma_feats
 
 
 parser = argparse.ArgumentParser()
@@ -43,7 +42,7 @@ args = parser.parse_args()
 
 lemmatizer = wordform_to_lemma
 if args.gold:
-    lemmatizer = extract_lemma_feat
+    lemmatizer = extract_lemma_feats
 
 
 with open(args.input_fn, 'r') as f:
@@ -62,11 +61,16 @@ with open(args.input_fn, 'r') as f:
         # an empty line.
         decoded = [line.decode('utf-8').strip() for line in lines]
         if decoded[0]:
-            lemma = lemmatizer(decoded[0])
+            lemmas = lemmatizer(decoded[0])
 
-            if lemma:
-                feat = '{}{}'.format(LEMMA_FEATURE_LABEL, lemma)
-                decoded[-1] += '\t' + feat
+            feats = []
+            if lemmas:
+                for lemma in lemmas:
+                    feat = u'{}{}'.format(LEMMA_FEATURE_LABEL, lemma)
+                    feats.append(feat)
+
+                whole_feat = '\t'.join(feats)
+                decoded[-1] += '\t' + whole_feat
 
             encoded = decoded[-1].encode('utf-8')
             print(encoded)

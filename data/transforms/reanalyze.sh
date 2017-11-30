@@ -18,8 +18,8 @@ do
 
   fn=$(basename $f)
   can_fn=${fn%.*}
-  $SCRIPTPATH/./reconstruct_sent_tok.py $f > $2/$can_fn.txt
-  $SCRIPTPATH/../../preprocess/./analyze.sh -n $2/$can_fn.txt
-  $SCRIPTPATH/./transfer_annotations.py $f $2/$can_fn.txt.final > $2/$can_fn.txt.tmp
-  mv $2/$can_fn.txt.tmp $2/$can_fn.txt.final
+  $SCRIPTPATH/./reconstruct_sent_tok.py $f > $2/$can_fn.pp
+  $SCRIPTPATH/../../preprocess/./analyze.sh -n $2/$can_fn.pp
+  $SCRIPTPATH/./transfer_annotations.py $f $2/$can_fn.pp.rdr.final > $2/$can_fn.pp.rdr.tmp
+  mv $2/$can_fn.pp.rdr.tmp $2/$can_fn.pp.rdr
 done
