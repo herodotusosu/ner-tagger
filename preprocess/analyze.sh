@@ -64,20 +64,45 @@ $SCRIPTPATH/./tokenMapping.py $f.tmp > $f.rdr
 rm $f.tmp
 rm $tokenized_file.TAGGED
 
+rm $tokenized_file
 
-# William Whitteker's Words
+
+# William Whittaker's Words
 #
 # Now time for morphological analysis that will be combined with the POS tagging
-# output.
-cat $f.rdr | python $SCRIPTPATH/removeIchars.py > $f.temp
+# output. First do tree tagger combination then do rdr combination.
+
+# TreeTagger combination
+cat $f.tt | python $SCRIPTPATH/removeIchars.py > $f.tt.temp
 cd /usr/local/words
-python mainExtractPossiblePOSTagsEXP2.py $cur/$f.temp > $cur/$f.WWW
+python mainExtractPossiblePOSTagsEXP2.py $cur/$f.tt.temp > $cur/$f.tt.WWW
 cd $cur
 
-echo William Whitakers Words is Done Analyzing $f
+echo William Whitakers Words is Done Analyzing $f TreeTagger analysis
 echo Now to filter POS tags by Analysis
 echo
 
-python $SCRIPTPATH/filterRDRPOSbyWWW.py $f.temp $f.WWW > $f.final
-rm $f.WWW
-rm $f.temp
+python $SCRIPTPATH/filterPOSbyWWW2.py $f.tt.temp $f.tt.WWW > $f.tt.final
+rm $f.tt.WWW
+rm $f.tt.temp
+rm $f.tt
+
+# RDRPOSTagger combination
+cat $f.rdr | python $SCRIPTPATH/removeIchars.py > $f.rdr.temp
+cd /usr/local/words
+python mainExtractPossiblePOSTagsEXP2.py $cur/$f.rdr.temp > $cur/$f.rdr.WWW
+cd $cur
+
+echo William Whitakers Words is Done Analyzing $f RDRPOSTagger analysis
+echo Now to filter POS tags by Analysis
+echo
+
+python $SCRIPTPATH/filterRDRPOSbyWWW.py $f.rdr.temp $f.rdr.WWW > $f.rdr.final
+rm $f.rdr.WWW
+rm $f.rdr.temp
+rm $f.rdr
+
+# Now transfer the lemma analysis from the TreeTagger based files to the
+# RDRPOSTagger based files.
+$SCRIPTPATH/./lemmatize.py $f.rdr.final --gold $f.tt.final > $f.rdr.final.lem
+mv $f.rdr.final.lem $f.rdr.final
