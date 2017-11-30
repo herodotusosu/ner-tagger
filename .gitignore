@@ -1,6 +1,9 @@
-# I don't want to store the preprocessed files. At least I think I don't.
+# I don't want to store the preprocessed files in the index. These can later be
+# stored in some central repository.
 Preprocessing/Preprocessed
 Preprocessed
+data/*
+!data/transforms
 
 venv/
 /**/.cache/
