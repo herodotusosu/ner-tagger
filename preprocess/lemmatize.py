@@ -72,8 +72,8 @@ with open(args.input_fn, 'r') as f:
                 whole_feat = '\t'.join(feats)
                 decoded[-1] += '\t' + whole_feat
 
-            encoded = decoded[-1].encode('utf-8')
-            print(encoded)
+        encoded = decoded[-1].encode('utf-8')
+        print(encoded)
 
     if args.gold:
         gold.close()
