@@ -4,47 +4,59 @@
 # This is the main analysis script. This script takes in a text file does POS
 # tagging, morphological analysis, and filtering of these results to create a
 # combined analysis. This is the main preprocessing logic. There are currently
-# two available option flags, n and l. If n is set, the input file will not be
-# sentized and tokenized, and will be used as is in the analysis. If n is set
-# then l can be set, which will provide a lemmatized file. This is necessary for
-# now because if you are providing a pretokenized file then the tokenization
+# three available option flags, n, l, and p. If n is set, the input file will
+# not be sentized and tokenized, and will be used as is in the analysis. If n is
+# set then l must be set, which will provide a lemmatized file. This is necessary
+# for now because if you are providing a pretokenized file then the tokenization
 # from the TreeTagger analysis here might not match. In which case, the lemmas
-# would not correspond between analyses.
+# would not correspond between analyses. The p flag uses the UD_Latin-PROIEL
+# data rather than the UD_Latin data in the RDR model.
 #
 # Note that the -n flag must be before the filename, and -l after -n!
 #
 # Usage:
-#   ./analyze.sh [-n] [-l] lemma.txt input.txt
+#   ./analyze.sh [-n] [-p] [-l] lemma.txt input.txt
 #
 
 cur=$(pwd)
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-no_tok=false
-lemmas_provided=false
+no_tok=0
+lemmas_provided=0
 
-while getopts "nl" opt
+# These are the locations of the UD_Latin POS models for RDRPOSTagger. These
+# locations can be swapped out with the locations of the UD_Latin-PROIEL model
+# with the -p flag.
+latin_model_loc='../Models/UniPOS/UD_Latin'
+latin_rdr="${latin_model_loc}/la-upos.RDR"
+latin_dict="${latin_model_loc}/la-upos.DICT"
+
+while getopts "npl" opt
 do
   case $opt in
     n)
-      no_tok=true
+      no_tok=1
       ;;
     l)
-      lemmas_provided=true
+      lemmas_provided=1
+      ;;
+    p)
+      latin_model_loc='../Models/UniPOS/UD_Latin-PROIEL'
+      latin_rdr="${latin_model_loc}/la_proiel-upos.RDR"
+      latin_dict="${latin_model_loc}/la_proiel-upos.DICT"
       ;;
   esac
 done
 
-
 # You can not have no_tok and lemmas_provided be different values.
-if [ ($no_tok -a ! $lemmas_provided) -o ! $no_tok -a $lemmas_provided]; then
+if [ $no_tok -ne $lemmas_provided ]; then
   echo You can not choose no tokenization and not provide a parallel lemma file
   echo for the RDR analysis.
   exit 1
 fi
 
 if [ $lemmas_provided ]; then
+  f=${@:$OPTIND+1:1}
   fl=${@:$OPTIND:1}
-  f=${@:$OPTIND+1:2}
 else
   # If there is no preprovided lemma file, then just use the result of the
   # TreeTagger analysis.
@@ -78,10 +90,7 @@ rm $f.tt.tagged
 # the current corpus file.
 abs_tok_loc="$cur/$tokenized_file"
 cd ~/RDRPOSTagger/jSCRDRtagger
-latin_trained_loc='../Models/UniPOS/UD_Latin'
-latin_model="${latin_trained_loc}/la-upos.RDR"
-latin_dict="${latin_trained_loc}/la-upos.DICT"
-java RDRPOSTagger $latin_model $latin_dict $abs_tok_loc
+java RDRPOSTagger $latin_rdr $latin_dict $abs_tok_loc
 cd $cur
 
 python $SCRIPTPATH/processRDR.py $tokenized_file.TAGGED > $f.tmp
