@@ -91,10 +91,12 @@ with open(args.rdr, 'r') as rdr, open(args.www, 'r') as www:
                     feature_store.add_feature('RDR-POS', pos)
 
                 feature_store.add_key('WWW-POT-MORPHEMES', 2)
+                feature_store.add_key('WWW-DEF-MORPHEMES', 3)
 
                 s = True
                 p = True
 
+                matches = 0
                 for morph_analysis in morph_analyses:
                     morphology, morpheme_raw = morph_analysis.split(ANALYSIS_DELIMETER)
                     morphemes = morpheme_raw.split(MORPHEME_DELIMETER)
@@ -102,12 +104,21 @@ with open(args.rdr, 'r') as rdr, open(args.www, 'r') as www:
                     # The pos analysis matched the morphological analysis in
                     # some way. Now add the morphemes here to the features.
                     if rdr_matcher.match(pos, morphology):
+                        matches += 1
                         for morpheme in morphemes:
                             feature_store.add_feature('WWW-POT-MORPHEMES', morpheme)
 
                     morph_features = morphology.split(MORPH_FEATURE_DELIMETER)
                     s = s and 'S' in morph_features
                     p = s and 'P' in morph_features
+
+                # If there was only one matching analysis, also add the
+                # morphemes as definite analyses. This is done in the original
+                # script so I am also doing it here to evaluate results as best
+                # as possible.
+                if matches == 1:
+                    for morpheme in morphemes:
+                        feature_store.add_feature('WWW-DEF-MORPHEMES', morpheme)
 
                 if s:
                     feature_store.add_singleton('WWW-SING', 3)
