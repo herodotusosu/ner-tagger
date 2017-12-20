@@ -1,4 +1,7 @@
 import itertools
+import math
+import operator
+
 
 #
 # Houses various different statistical tests and utility functions.
@@ -16,6 +19,13 @@ CHI_SQUARED_DF_1 = {
     0.01: 6.635,
     0.005: 7.879
 }
+
+
+def choose(n, k):
+    top = reduce(operator.mul, xrange(n - k + 1, n + 1))
+    bottom = reduce(operator.mul, xrange(1, k + 1))
+
+    return top / bottom
 
 
 def mcnemars(test1, test2, p):
@@ -52,7 +62,16 @@ def mcnemars(test1, test2, p):
         elif not sample1 and sample2:
             c += 1
 
-    chi = (((b - c) * (b - c)) * 1.0) / (b + c)
-    threshold = CHI_SQUARED_DF_1[p]
+    if b + c < 25:
+        n = b + c
+        s = 0
+        for i in range(b, n + 1):
+            s += choose(n, i) * math.pow(0.5, n)
 
-    return (chi < threshold, b, c)
+        accept = s >= p
+    else:
+        chi = (((b - c) * (b - c)) * 1.0) / (b + c)
+        threshold = CHI_SQUARED_DF_1[p]
+        accept = chi < threshold
+
+    return (accept, b, c)
