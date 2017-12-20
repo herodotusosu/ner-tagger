@@ -4,6 +4,7 @@ import itertools
 # Houses various different statistical tests and utility functions.
 #
 
+
 CHI_SQUARED_DF_1 = {
     0.995: 0.0000393,
     0.975: 0.000982,
@@ -16,11 +17,13 @@ CHI_SQUARED_DF_1 = {
     0.005: 7.879
 }
 
+
 def mcnemars(test1, test2, p):
     """
     Provide a McNemars statistical analysis on the given vectors of results. The
     vectors must align with subjects so that the first result from each test
-    refers to the same item.
+    refers to the same item. Note that this assumes that there is enough data to
+    approximate the data with a chi squared distribution with DF 1.
 
     Args:
     test1: A vector of results for the first test, where 0 means negative result
@@ -49,7 +52,7 @@ def mcnemars(test1, test2, p):
         elif not sample1 and sample2:
             c += 1
 
-    chi = ((b - c) * (b - c)) / (b + c)
+    chi = (((b - c) * (b - c)) * 1.0) / (b + c)
     threshold = CHI_SQUARED_DF_1[p]
 
     return (chi < threshold, b, c)
