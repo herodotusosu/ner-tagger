@@ -7,6 +7,16 @@ import operator
 from model import *
 from functionsLCcomplete import *
 
+#
+# Script to calculate results given the predicted annotations / NER for a test
+# file and the train file. Provide the predicted file, which has the actual
+# answers spliced in and the train file. Statistics to be printed can also be
+# specified through command line args.
+#
+# Usage:
+#   ./scorerLCcomplete.py pred-test.txt train.txt printOption
+#
+
 PredTest = (open(sys.argv[1]).read().splitlines())
 train = (open(sys.argv[2]).read().splitlines())
 printOption = sys.argv[3]# -Complete = ready for templateComplete.csv
@@ -41,6 +51,7 @@ def getTotalsAndByClassAndUNK(output, start, printline):
 			GEO = Model('')#count to [F,Prec,Rec]
 			GRP = Model('')
 			PRS = Model('')
+			NON_NE = Model('')
 			for j in range(start,i):
 				if j in output and len(output[j].split(',')) > 0:
 					line = output[j]
@@ -59,6 +70,11 @@ def getTotalsAndByClassAndUNK(output, start, printline):
 						if cnt in PRS:
 							cnt += .000000001
 						PRS[cnt] = [float(line.split(',')[3]),float(line.split(',')[1]),float(line.split(',')[2])]
+					if '0' in line.split(',')[0]:
+						cnt = float(line.split(',')[4])
+						if cnt in NON_NE:
+							cnt += .000000001
+						NON_NE[cnt] = [float(line.split(',')[3]),float(line.split(',')[1]),float(line.split(',')[2])]
 			### we have the class statistics, now to put them in the printline
 			if len(GEO) != 0:
 				totalCount = 0
@@ -102,6 +118,20 @@ def getTotalsAndByClassAndUNK(output, start, printline):
 					PRSPrec += PRS[count][1] * (count/totalCount)
 					PRSRec += PRS[count][2] * (count/totalCount)
 				printline += str(PRSF)+','+str(PRSPrec)+','+str(PRSRec)+','+str(totalCount)
+
+			if len(NON_NE) != 0:
+				totalCount = 0
+				for count in NON_NE:
+					totalCount += int(count)
+				NON_NE_F = 0
+				NON_NE_Prec = 0
+				NON_NE_Rec = 0
+				for count in NON_NE:
+					NON_NE_F += NON_NE[count][0] * (count/totalCount)
+					NON_NE_Prec += NON_NE[count][1] * (count/totalCount)
+					NON_NE_Rec += NON_NE[count][2] * (count/totalCount)
+				printline += str(NON_NE_F)+','+str(NON_NE_Prec)+','+str(NON_NE_Rec)+','+str(totalCount)
+
 			else:
 				printline += '0,0,0,0'			
 			break ### Stops after getting the overall totals and by class, but not domain or UNK yet
