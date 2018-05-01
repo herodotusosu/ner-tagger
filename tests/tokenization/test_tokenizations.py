@@ -10,9 +10,14 @@
 #   pytest test_tokenizations.py [--file1 file1.txt] [--file2 file2.txt] \
 #   [--col1 1] [--col2 1]
 #
+# OR
+#
+#   ./test_tokenizations --file1 file1.txt --file2 file2.txt --col1 1 --col2 1
+#
 
 
 import itertools
+import argparse
 
 
 def match_tokenizations(*files, **kwargs):
@@ -27,6 +32,7 @@ def match_tokenizations(*files, **kwargs):
     Returns:
     The index of the first line where the tokens did not match.
     """
+    case = kwargs.get('case')
     col_indices = kwargs.get('col_indices')
     if col_indices is None:
         col_indices = [1] * len(files)
@@ -49,11 +55,15 @@ def match_tokenizations(*files, **kwargs):
                 index = col_indices[j]
                 token = cols[index]
 
-                tokens.append(token)
+                tokens.append(token.lower())
             else:
                 tokens.append('')
 
-        same = reduce(lambda acc, token: acc and token == tokens[0], tokens, True)
+        if case:
+            same = reduce(lambda acc, token: acc and token == tokens[0], tokens, True)
+        else:
+            same = reduce(lambda acc, token: acc and token == tokens[0], tokens, True)
+
         if not same:
             res = i + 1
             break
@@ -64,7 +74,7 @@ def match_tokenizations(*files, **kwargs):
     return res
 
 
-def test_tokenizations(file1, column1, file2, column2):
+def test_tokenizations(file1, column1, file2, column2, case):
     """
     Test that all the preprocessed files are appropriately tokenized. This is
     useful after changing around POS taggers, morphological analyzers, and want
@@ -75,9 +85,23 @@ def test_tokenizations(file1, column1, file2, column2):
         indices = (int(column1), int(column2))
     else:
         indices = None
-    line_mismatch = match_tokenizations(file1, file2, col_indices=indices)
+    line_mismatch = match_tokenizations(file1, file2, col_indices=indices, case=case)
     matches = line_mismatch < 0
 
     if not matches:
         msg = 'FAILED at line #{}'.format(line_mismatch)
     assert matches, msg
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--file1', required=True, help='The location of file 1')
+    parser.add_argument('--file2', required=True, help='The location of file 2')
+    parser.add_argument('--col1', required=True, type=int,
+        help='The column of the lemma in file1')
+    parser.add_argument('--col2', required=True, type=int,
+        help='The column of the lemma in file2')
+    parser.add_argument('--case', type=bool, default=True,
+        help='Whether or not to keep case.')
+    args = parser.parse_args()
+
+    test_tokenizations(args.file1, args.col1, args.file2, args.col2, args.case)

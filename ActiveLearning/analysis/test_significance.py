@@ -38,7 +38,7 @@ def extract_labels(line):
 def map_can_label(label):
     """
     Labels are marked for whether they are first or last in a sequence. To
-    calculate significance across all PRS, or GEO tags, we do not care abou the
+    calculate significance across all PRS, or GEO tags, we do not care about the
     sequencing, so get rid of it.
 
     Args:
@@ -84,7 +84,9 @@ for fn in (args.pred1, args.pred2):
 
     pred_vectors.append(pred_vec)
 
-accept_null, _, _ = stats.mcnemars(pred_vectors[0], pred_vectors[1], args.p)
+accept_null, _, _, sig_value = stats.mcnemars(pred_vectors[0], pred_vectors[1], args.p)
+
+print('Significance value of {}'.format(sig_value))
 
 if accept_null:
     print('Results are not too different after all.')

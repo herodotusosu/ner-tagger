@@ -1,8 +1,5 @@
 from __future__ import division
 import sys
-import string
-from model import *
-import time
 
 train = (open(sys.argv[1]).read().splitlines())
 addedSents = (open(sys.argv[2]).read().splitlines())

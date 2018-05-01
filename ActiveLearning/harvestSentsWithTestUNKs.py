@@ -1,13 +1,7 @@
-from __future__ import division
 import sys
-import re
-import os
-import string
-import operator
 from model import *
 import cPickle as pickle
 import numpy
-import time
 
 LeftOver = (open(sys.argv[1]).read().splitlines())
 inputfile = (open(sys.argv[2]))
@@ -49,22 +43,13 @@ for line in LeftOver:
 				sentID += 1
 				sentID2origUNKcounts[sentID] = UNKs
 				for line2 in sent:
-				
-					# pass
-					print line2 #+ '\t'+str(UNKs)	
+					print line2
 				print
 				
 		sent = []
 		foundTestUNK = False
 	else:
 		sent.append(line)
-	
+
 with open("sentID2origUNKcounts.dat",'w') as of:
 		pickle.dump(sentID2origUNKcounts,of)
-		
-# for i in range(0,len(sentID2origUNKcounts)):
-	# print i 
-	# print sentID2origUNKcounts[i]
-	# print
-	# time.sleep(1)
-	

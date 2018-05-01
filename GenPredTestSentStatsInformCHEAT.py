@@ -13,7 +13,6 @@ import math
 LeftOverUnannotated = (open(sys.argv[1]).read().splitlines())
 inputfile = (open(sys.argv[2]))
 sentID2origUNKcounts = pickle.load(inputfile)
-# LeftOverOrigUNKs  = (open(sys.argv[2]).read().splitlines())
 LeftOverPred  = (open(sys.argv[3]).read().splitlines())
 TestPred = (open(sys.argv[4]).read().splitlines())
 inputfile = (open(sys.argv[5]))
@@ -40,9 +39,7 @@ if easy == False:
 			wordID = -1
 			sentProb = TestPred[i+more].split()[1]
 			more += 1
-		if len(Test[i].split()) == 0:
-			pass
-		else:
+		if len(Test[i].split()) != 0:
 			word = Test[i].split()[1]
 			for p in TestUNKs:
 				if word.lower() in TestUNKs[p]:
@@ -98,13 +95,7 @@ for i in range(0, len(LeftOverUnannotated)):
 								key = word.lower()
 								while key in sentID2tUNK2listStats[sentID]:
 									key += '*'
-									#print key
 								sentID2tUNK2listStats[sentID][key] = list
-								
-								# for k in sentList:
-									# print k
-								# print
-								# time.sleep(2)
 		
 		sentProb = LeftOverPred[i+more].split()[1]
 		if float(sentProb) <= 0:
@@ -128,7 +119,7 @@ for i in range(0, len(LeftOverUnannotated)):
 		sent.append(word+'$$$'+margProb)
 		line = ''
 		""" LOOK HERE !!!!!!!!!!!!!!! """
-		label = LeftOverPred[i+more].split()[0]#[1].split(':')[0]
+		label = LeftOverPred[i+more].split()[0]
 		line += label
 		for item in LeftOverUnannotated[i].split()[1:]:
 			line += '\t'+item
@@ -136,17 +127,3 @@ for i in range(0, len(LeftOverUnannotated)):
 		
 with open("sentID2tUNK2listStats.dat",'w') as of:
 		pickle.dump(sentID2tUNK2listStats,of)
-		
-#############################################################
-
-# for sid in sentID2tUNK2listStats:
-	# for UNK in sentID2tUNK2listStats[sid]:
-		# print sid
-		# print UNK
-		# print sentID2tUNK2listStats[sid][UNK]
-		# print
-		
-# print len(sentID2tUNK2listStats)
-
-
-			

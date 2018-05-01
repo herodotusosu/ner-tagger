@@ -25,7 +25,8 @@ def space_punc(s):
     new_chars = []
     for i, char in enumerate(s):
         if char in PUNCTUATION:
-            if new_chars and new_chars[-1] != SPACE:
+            first_initial = (i > 1 and s[i - 2] == SPACE) or (i == 1 and s[0].isalnum())
+            if not first_initial and new_chars and new_chars[-1] != SPACE:
                 new_chars.append(' ')
 
             new_chars.append(char)

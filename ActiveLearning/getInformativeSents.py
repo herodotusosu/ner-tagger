@@ -57,7 +57,7 @@ with open('trainNew.ftrs', 'w') as output:
 			output.write('\n')
 
 ####### PRINT OUT NEW LEFTOVERUNANNOTATED.FTRS ################
-			
+
 oldSIDs2newSIDs = [] # each item = embedded list [oldID,newID]
 
 oldSID = 0	
@@ -74,7 +74,7 @@ for line in LeftOverWithFeatsAdded:
 		lastIn = True
 	else:
 		lastIn = False
-	
+
 ############## MAP OLD SIDS TO NEW SIDS ###################	
 
 sentID2origUNKcounts2 = {}
@@ -89,6 +89,3 @@ with open("sentID2origUNKcounts2.dat",'w') as of:
 		pickle.dump(sentID2origUNKcounts2,of)
 
 ###############################################################
-
-	
-	

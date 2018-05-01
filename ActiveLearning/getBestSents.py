@@ -1,8 +1,5 @@
 from __future__ import division
 import sys
-import string
-from model import *
-import time
 
 orderedTest = (open(sys.argv[1]).read().splitlines())
 sentsAtATime = int(sys.argv[2])

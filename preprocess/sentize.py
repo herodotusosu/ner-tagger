@@ -19,8 +19,9 @@ import argparse
 
 
 OPEN_BRACKETS = '([{"'
-CLOSED_BRACKETS = '([{"'
+CLOSED_BRACKETS = ')]}"'
 END_PUNCTUATION = '.!?'
+QUOTES = '\'"'
 BLANKMARKER = 'LEAVEBLANK'
 
 
@@ -54,9 +55,9 @@ with open(args.filename, 'r') as f:
                 # the character before the punc is lower case, and the
                 # character after the space is upper case.
                 if bracket_count == 0 and \
-                   (last_end_punctuation + 1 == i and char == ' ') and \
-                   (last_end_punctuation > 0 and line[last_end_punctuation - 1].islower()) and \
-                   (last_end_punctuation + 2 < len(line) and line[last_end_punctuation + 2].isupper()):
+                   (last_end_punctuation + 1 == i and char == ' ' or char in QUOTES) and \
+                   (last_end_punctuation > 1 and line[last_end_punctuation - 2] != ' ') and \
+                   (last_end_punctuation > 0 and line[last_end_punctuation - 1].islower()):
                     raw = line[last_sentence:last_end_punctuation + 1]
                     sentence = raw
 

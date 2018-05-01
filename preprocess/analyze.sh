@@ -54,7 +54,7 @@ if [ $no_tok -ne $lemmas_provided ]; then
   exit 1
 fi
 
-if [ $lemmas_provided ]; then
+if [ $lemmas_provided -ne 0 ]; then
   f=${@:$OPTIND+1:1}
   fl=${@:$OPTIND:1}
 else
@@ -64,7 +64,7 @@ else
   fl=$f.tt.final
 fi
 
-if  [ ! $no_tok ]; then
+if  [ $no_tok -eq 0 ]; then
   $SCRIPTPATH/./sentize.py $f > $f.sent
   $SCRIPTPATH/./tokenize.py $f.sent > $f.tok
   rm $f.sent
@@ -88,17 +88,19 @@ rm $f.tt.tagged
 #
 # Head to the RDRPOSTagger and use the pretrained latin models on UD to tag
 # the current corpus file.
-abs_tok_loc="$cur/$tokenized_file"
-cd ~/RDRPOSTagger/jSCRDRtagger
-java RDRPOSTagger $latin_rdr $latin_dict $abs_tok_loc
-cd $cur
-
-python $SCRIPTPATH/processRDR.py $tokenized_file.TAGGED > $f.tmp
-$SCRIPTPATH/./tokenMapping.py $f.tmp > $f.rdr
-rm $f.tmp
-rm $tokenized_file.TAGGED
-
-rm $tokenized_file
+#abs_tok_loc="$cur/$tokenized_file"
+#cd ~/RDRPOSTagger/jSCRDRtagger
+#java RDRPOSTagger $latin_rdr $latin_dict $abs_tok_loc
+#cd $cur
+#
+#python $SCRIPTPATH/processRDR.py $tokenized_file.TAGGED > $f.tmp
+#$SCRIPTPATH/./tokenMapping.py $f.tmp > $f.rdr
+#rm $f.tmp
+#rm $tokenized_file.TAGGED
+#
+#if [ ! $no_tok ]; then
+#  rm $tokenized_file
+#fi
 
 
 # William Whittaker's Words
@@ -122,21 +124,21 @@ rm $f.tt.temp
 rm $f.tt
 
 # RDRPOSTagger combination
-cat $f.rdr | python $SCRIPTPATH/removeIchars.py > $f.rdr.temp
-cd /usr/local/words
-python mainExtractPossiblePOSTagsEXP2.py $cur/$f.rdr.temp > $cur/$f.rdr.WWW
-cd $cur
-
-echo William Whitakers Words is Done Analyzing $f RDRPOSTagger analysis
-echo Now to filter POS tags by Analysis
-echo
-
-python $SCRIPTPATH/filterRDRPOSbyWWW.py $f.rdr.temp $f.rdr.WWW > $f.rdr.final
-rm $f.rdr.WWW
-rm $f.rdr.temp
-rm $f.rdr
+#cat $f.rdr | python $SCRIPTPATH/removeIchars.py > $f.rdr.temp
+#cd /usr/local/words
+#python mainExtractPossiblePOSTagsEXP2.py $cur/$f.rdr.temp > $cur/$f.rdr.WWW
+#cd $cur
+#
+#echo William Whitakers Words is Done Analyzing $f RDRPOSTagger analysis
+#echo Now to filter POS tags by Analysis
+#echo
+#
+#python $SCRIPTPATH/filterRDRPOSbyWWW.py $f.rdr.temp $f.rdr.WWW > $f.rdr.final
+#rm $f.rdr.WWW
+#rm $f.rdr.temp
+#rm $f.rdr
 
 # Now transfer the lemma analysis from the TreeTagger based files to the
 # RDRPOSTagger based files. If the lemma file was provided then use that.
-$SCRIPTPATH/./lemmatize.py $f.rdr.final --gold $fl > $f.rdr.final.lem
-mv $f.rdr.final.lem $f.rdr.final
+#$SCRIPTPATH/./lemmatize.py $f.rdr.final --gold $fl > $f.rdr.final.lem
+#mv $f.rdr.final.lem $f.rdr.final

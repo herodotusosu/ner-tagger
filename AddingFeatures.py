@@ -93,7 +93,6 @@ lem = ['<s>']
 feats = []
 
 """ Now that it is initialized, go through corpus """
-i = 0
 prose = True
 for i, line in enumerate(annotation):
 ##############################

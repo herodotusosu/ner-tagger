@@ -62,6 +62,7 @@ def mcnemars(test1, test2, p):
         elif not sample1 and sample2:
             c += 1
 
+    sig_value = 0
     if b + c < 25:
         n = b + c
         s = 0
@@ -72,6 +73,7 @@ def mcnemars(test1, test2, p):
     else:
         chi = (((b - c) * (b - c)) * 1.0) / (b + c)
         threshold = CHI_SQUARED_DF_1[p]
-        accept = chi < threshold
+        sig_value = chi
+        accept = chi <= threshold
 
-    return (accept, b, c)
+    return (accept, b, c, sig_value)
