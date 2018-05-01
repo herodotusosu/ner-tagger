@@ -74,6 +74,9 @@ while :
 do
   echo BETA is $beta
 	python getBestSents.py newTest.ftrs $sentsAtATime -train > delete.txt
+  python getBestSentsAnnotation.py delete.txt
+  break
+
 	cat added2train.ftrs delete.txt > added2train.ftrs_tmp
 	mv added2train.ftrs_tmp added2train.ftrs
 	python getBestSents.py newTest.ftrs $sentsAtATime -leftOver > newTest.ftrs_tmp

@@ -1,3 +1,10 @@
+# I don't want to store the preprocessed files in the index. These can later be
+# stored in some central repository.
+Preprocessing/Preprocessed
+Preprocessed
+data/*
+!data/transforms
+
 venv/
 __pycache__/
 
@@ -6,3 +13,9 @@ __pycache__/
 *.cls
 *.txt
 *.ftrs
+
+venv/
+/**/.cache/
+
+# Ignore compiled python files and vim files
+*.*.swp

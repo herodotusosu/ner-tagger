@@ -42,7 +42,7 @@ if sys.argv[4] != '-rest':
 					sentID += 1
 					sentID2origUNKcounts[sentID] = UNKs
 					for line2 in sent:
-						print line2 #+ '\t'+str(UNKs)	
+						print line2
 					print
 			sent = []
 			foundTestUNK = False
@@ -91,40 +91,3 @@ else:
 		if sent not in sents:
 			for l2 in printlines:
 				print l2
-		
-	
-	# foundTestUNK = False
-	# for line in LeftOver:
-		# if len(line.split()) == 0:
-			# if len(sent) >= minSentLength:
-				# UNKs = 0
-				# for line2 in sent:
-					# word = line2.split()[1]
-					# if word not in trainWords:
-						# UNKs += 1
-						# if UNKs > maxNumberUNKs:
-							# break
-						# for priority in testUNKs:
-							# if word.lower() in testUNKs[priority]:
-								# foundTestUNK = True
-								# break
-				# if foundTestUNK == True and UNKs <= maxNumberUNKs:
-					# sentID += 1
-					# sentID2origUNKcounts[sentID] = UNKs
-				# else:
-					# for line2 in sent:
-						# print line2 #+ '\t'+str(UNKs)	
-					# print
-			# else:
-				# for line2 in sent:
-					# print line2
-				# print
-				
-			# sent = []
-			# foundTestUNK = False
-			
-		# else:
-			# sent.append(line)
-		
-
-	

@@ -18,7 +18,7 @@ echo GETTING CAPPED TEST UNKS AND PRINTING NUMBER OF CAPPED TEST UNKS WHICH WE W
 python gettingTestUNKs.py train$beta.ftrs test$beta.ftrs # pickle out two models: trainWords[word]=freqInTraining &&& testUNKs[priorityLevel:1=highest,2=next,etc.][testUNK]=freqInTesting
 
 echo GETTING UNANNOTATED CORPUS
-cat ../Preprocessed/*/*.txt | python ../Preprocessing/removeDoubles.py > LeftOverUnannotated.txt # IMPORTANT - BUT MAYBE FOR FUTURE WORK!!! Consider adding step here where metadata features get added to identify author, text, editor, time period, domain/genre, etc.
+cat ../Preprocessed/*/*.txt | python ../preprocess/removeDoubles.py > LeftOverUnannotated.txt # IMPORTANT - BUT MAYBE FOR FUTURE WORK!!! Consider adding step here where metadata features get added to identify author, text, editor, time period, domain/genre, etc.
 echo ORIGINAL LENGTH WAS
 cat LeftOverUnannotated.txt | sed '/^\s*$/d' | wc -l
 
@@ -30,7 +30,7 @@ cat LeftOverUnannotated.txt | sed '/^\s*$/d' | wc -l
 ### pickles out a sentID2origUNKcounts.dat file which is dictionary where the sentIDs of the sentences will be updated constantly to match their position in LeftOverUnannotated.txt as it evolves each iteration, still allowing us to access the count for how many words were originally UNK before recursive training.
 
 echo GETTING FEATURES FOR NEWLY LIMITED UNANNOTATED CORPUS
-python ../AddingFeatures.py LeftOverUnannotated.txt domainPlaceHolder ../Gazetteers/GEOall.txt ../Gazetteers/GEOFs.txt ../Gazetteers/GEOLs.txt ../Gazetteers/GEOMWEs.txt ../Gazetteers/GEOs.txt ../Gazetteers/GEOUs.txt ../Gazetteers/PRSall.txt ../Gazetteers/PRSFs.txt ../Gazetteers/PRSLs.txt ../Gazetteers/PRSMWEs.txt ../Gazetteers/PRSs.txt ../Gazetteers/PRSUs.txt ../Gazetteers/UNKall.txt ../Gazetteers/UNKFs.txt ../Gazetteers/UNKLs.txt ../Gazetteers/UNKMWEs.txt ../Gazetteers/UNKs.txt ../Gazetteers/UNKUs.txt w2v/sims.txt w2v/simsLemmedSmall.txt words.dat > LeftOverUnannotated.ftrs
+python ../AddingFeatures.py LeftOverUnannotated.txt domainPlaceHolder ../Gazetteers/GEOall.txt ../Gazetteers/GEOFs.txt ../Gazetteers/GEOLs.txt ../Gazetteers/GEOMWEs.txt ../Gazetteers/GEOs.txt ../Gazetteers/GEOUs.txt ../Gazetteers/PRSall.txt ../Gazetteers/PRSFs.txt ../Gazetteers/PRSLs.txt ../Gazetteers/PRSMWEs.txt ../Gazetteers/PRSs.txt ../Gazetteers/PRSUs.txt ../Gazetteers/UNKall.txt ../Gazetteers/UNKFs.txt ../Gazetteers/UNKLs.txt ../Gazetteers/UNKMWEs.txt ../Gazetteers/UNKs.txt ../Gazetteers/UNKUs.txt > LeftOverUnannotated.ftrs
 rm LeftOverUnannotated.txt
 #cp LeftOverUnannotated.ftrs origLeftOverUnannotated.ftrs
 

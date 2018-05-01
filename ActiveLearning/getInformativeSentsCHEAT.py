@@ -45,24 +45,7 @@ for sid in sentID2tUNK2listStats:
 			p = 2
 		priority2tok2freqs[p][tUNK] = l[1]
 
-# print 'high priority'		
-# print len(priority2tok2freqs[1])
-# tokens = 0
-# for x in priority2tok2freqs[1]:
-	# tokens += priority2tok2freqs[1][x]
-# print tokens
-		
-# print 'low priority'		
-# print len(priority2tok2freqs[2])
-# tokens = 0
-# for x in priority2tok2freqs[2]:
-	# tokens += priority2tok2freqs[2][x]
-# print tokens
 
-# while True:
-	# pass
-			
-		
 """ 
 x[0] = priority
 x[1] = freqs
@@ -71,7 +54,7 @@ x[3] = origUNKcounts
 x[4] = sentProbs
 x[-3] = freqs/priority
 THE LAST NUMBER LISTED WILL GET HIHGEST PRIORITY IN SORTING
- """	
+"""
  
 allLists = sorted(sorted(sorted(sorted(sorted(sorted(allLists, key = lambda x : x[1], reverse = True), key = lambda x : x[4]), key = lambda x : x[3]), key = lambda x : x[0]), key = lambda x : x[2]), key = lambda x : x[-3], reverse = True)
 
@@ -82,6 +65,8 @@ allLists = sorted(sorted(sorted(sorted(sorted(sorted(allLists, key = lambda x : 
 usedSIDs = []
 counter = 0
 
+
+# TODO: Isn't this unnecessairily looping twice?
 while counter < len(allLists):
 	counter += 1
 	usedWords = []
@@ -89,9 +74,6 @@ while counter < len(allLists):
 		if l[-2] not in usedSIDs:
 			tUNK = l[-1]
 			if tUNK not in usedWords:
-				# newSID = wordsLeft - sentsLeft + 1
-				# header = 'Sent#'
-				# header += str(newSID)+'	TestUNK: '+l[-1]+'	Priority: '+str(l[0])+'	MP+MedMPfromTest: '+str(l[2])+'	SP: '+str(l[4])+'	freq: '+str(l[1])+'	totalUNKs: '+str(l[3])
 				# print header
 				for line in l[5]:
 					print line
@@ -99,44 +81,3 @@ while counter < len(allLists):
 				# sentsLeft -= 1
 				usedSIDs.append(l[-2])
 				usedWords.append(tUNK)
-			
-###############################################################
-
-### Finish writing this later if I decide adding multiple sents for some testUNKs is not repetitive			
-# if sentsLeft > 0:
-	# usedWords = []
-	# neglectedSents = []
-	# for l in allLists:
-		# currentFreq = l[-3]
-		# if currentFreq != pastFreq:
-			
-
-	
-		# else:
-			# if l[-2] not in usedSIDs:
-				# tUNK = l[-1]
-				# if tUNK not in usedWords:
-					# newSID = wordsLeft - sentsLeft + 1
-					# header = 'Sent#'
-					# header += str(newSID)+'	TestUNK: '+l[-1]+'	Priority: '+str(l[0])+'	MP-MedMPfromTest: '+str(l[2])+'	SP: '+str(l[4])+'	freq: '+str(l[1])+'	totalUNKs: '+str(l[3])
-					# print header
-					# for line in l[5]:
-						# print line
-					# print
-					# sentsLeft -= 1
-					# usedSIDs.append(l[-2])
-					# usedWords.append(tUNK)	
-				# else:
-					# neglectedSents.append(l)
-		
-		
-		
-		
-		
-		# pastFreq = currentFreq
-		
-		
-		
-		
-		
-		

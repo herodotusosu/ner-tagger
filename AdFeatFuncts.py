@@ -254,27 +254,7 @@ def getBPOSbiGrams(PPOS, CPOS):
 	bBi = 'bPOSBigram-'+P+'THEN'+C
 	
 	return bBi
-	
-""" W2V FEATURES """
 
-def addW2Vsims(printline, word, sims):
-	printline += '\tsim-'+word.lower().replace('j','i').replace('v','u')
-	if word in sims:
-		for sim in sims[word]:
-			printline += '\tsim-'+sim
-	return printline
-	
-def addW2VsimsLemmed(printline, lem, simsLemmed):
-	for l in lem:
-		if '<unknown' not in l:
-			lemma = l
-	lem = lemma
-	printline += '\tsimlem-'+lem.lower().replace('j','i').replace('v','u')
-	if lem in simsLemmed:
-		for sim in simsLemmed[lem]:
-			printline += '\tsimLem-'+sim
-	return printline
-	
 """ GAZETTEER FEATURES """
 
 ### Uses all gazetteers except MWE's
@@ -332,5 +312,3 @@ def addDaumeProsePoetry(printline, prose):
 		for item in items:
 			printline += '\t'+dom+'-'+item
 	return printline
-		
-		

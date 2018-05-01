@@ -1,37 +1,17 @@
-echo 'Preprocessing From Perseus XML Data:'
+#!/usr/bin/env bash
 
-files=$(find ../../../corpora/original/latin/canonical-latinLit/data/ -name "*-lat*.xml")
-for file in $files
-do
-	author=$(cat $file | python authorExtractorXML.py)
-	title=$(cat $file | python titleExtractorXML.py)
-	mkdir -p Preprocessed/$author
-	cd Preprocessed/$author	
-	while [ -e $title.txt ]
-	do
-		newInt='9'
-		title=$title$newInt
-	done
-	cd ../..
-	cat $file | python perseusExtractorXML.py | python removeDoubles.py | python holdBlanks.py > Preprocessed/$author/$title.txt
-	
-	echo $author, $title, "is ready for POS tagging and Morphological Analysis!"
-done
-##############################################################
+#
+# TODO
+#
 
-cd Preprocessed
-../main2.sh
+./processCorpora.sh /home/corpora/original/latin/canonical-latinLit/data/ Preprocessed/
+./analyzeCorpora.sh Preprocessed/
 
-echo Done POS Tagging all requested documents
-echo Filtering Tags by Morphological Analyzer
-echo
-
-../mainFinishPPwithWWW.sh
 
 echo Done filtering POS tags through Morphological Analyzer
 echo
 
-echo "The Requested Texts have been Preprocessed! You can find them in the direcory erdmann/NER/Preprocessing/Preprocessed/. 
+echo "The Requested Texts have been Preprocessed! You can find them in the direcory ~/NER/Preprocessing/Preprocessed/.
 
 Please be sure to move said texts to another directory so that the Preprocessed subdirectory is empty the next time you choose to preprocess something.
 

@@ -9,7 +9,7 @@ from model import *
 from AdFeatFuncts import *
 
 """ run with:
-	python ../AddingFeatures.py ../Preprocessing/Preprocessed/$folder/$file.pp domainPlaceHolder ../Gazetteers/GEOall.txt ../Gazetteers/GEOFs.txt ../Gazetteers/GEOLs.txt ../Gazetteers/GEOMWEs.txt ../Gazetteers/GEOs.txt ../Gazetteers/GEOUs.txt ../Gazetteers/PRSall.txt ../Gazetteers/PRSFs.txt ../Gazetteers/PRSLs.txt ../Gazetteers/PRSMWEs.txt ../Gazetteers/PRSs.txt ../Gazetteers/PRSUs.txt ../Gazetteers/UNKall.txt ../Gazetteers/UNKFs.txt ../Gazetteers/UNKLs.txt ../Gazetteers/UNKMWEs.txt ../Gazetteers/UNKs.txt ../Gazetteers/UNKUs.txt w2v/sims.txt w2v/simsLemmed.txt words.dat > $file.ftrs
+	python ../AddingFeatures.py ../Preprocessing/Preprocessed/$folder/$file.pp domainPlaceHolder ../Gazetteers/GEOall.txt ../Gazetteers/GEOFs.txt ../Gazetteers/GEOLs.txt ../Gazetteers/GEOMWEs.txt ../Gazetteers/GEOs.txt ../Gazetteers/GEOUs.txt ../Gazetteers/PRSall.txt ../Gazetteers/PRSFs.txt ../Gazetteers/PRSLs.txt ../Gazetteers/PRSMWEs.txt ../Gazetteers/PRSs.txt ../Gazetteers/PRSUs.txt ../Gazetteers/UNKall.txt ../Gazetteers/UNKFs.txt ../Gazetteers/UNKLs.txt ../Gazetteers/UNKMWEs.txt ../Gazetteers/UNKs.txt ../Gazetteers/UNKUs.txt > $file.ftrs
 	
 	1. <TrainingText.pp>
 	2. <domain> 
@@ -32,10 +32,6 @@ from AdFeatFuncts import *
 		18 	UNKMWE
 		19 	UNKs
 		20 	UNKUs
-	21.	sims.dat
-	22. <either simsLemmed.txt or simsLemmedSmall.txt>
-		
-		-1 words.dat
  """
 
 annotation = (open(sys.argv[1]).read().splitlines())
@@ -61,30 +57,8 @@ GazUNKMWEs = (open(sys.argv[18]).read().splitlines())
 GazUNKs = (open(sys.argv[19]).read().splitlines())
 GazUNKUs = (open(sys.argv[20]).read().splitlines())
 gazList = [GazGEOall,GazGEOFs,GazGEOLs,GazGEOMWEs,GazGEOs,GazGEOUs,GazPRSall,GazPRSFs,GazPRSLs,GazPRSMWEs,GazPRSs,GazPRSUs,GazUNKall,GazUNKFs,GazUNKLs,GazUNKMWEs,GazUNKs,GazUNKUs]
-sims = (open(sys.argv[21]).read().splitlines())
-simsLemmed = (open(sys.argv[22]).read().splitlines())
 inputfile = (open(sys.argv[-1]))
-words = pickle.load(inputfile)
-	
-""" Getting sims dicts """
-sms = {}
-for line in sims:
-	word = line.split()[0]
-	sim = []
-	if len(line.split()) > 1:
-		sim = line.split()[1:]
-	sms[word] = sim
-sims = sms
-	
-smsLemmed = {}
-for line in simsLemmed:
-	word = line.split()[0]
-	sim = []
-	if len(line.split()) > 1:
-		sim = line.split()[1:]
-	smsLemmed[word] = sim
-simsLemmed = smsLemmed
-			
+
 """ initialize with word, set of lems(just lem of UNK and lemma), and set of features """
 nextLem = []
 nextFeats = []
@@ -119,9 +93,8 @@ lem = ['<s>']
 feats = []
 
 """ Now that it is initialized, go through corpus """
-i = 0
 prose = True
-for line in annotation:
+for i, line in enumerate(annotation):
 ##############################
 	if word != '<s>':
 		prevPrevWord = prevWord
@@ -244,7 +217,6 @@ for line in annotation:
 		printline = addTtlPnctCrdnmAbbrv(printline, word, lem)
 		LENNGRAM = 6 # max char Ngram length from word boundary
 		printline = addCharacterNgrams(printline,word,LENNGRAM)
-		printline = addDeTitledNonProperNouns(printline, word, words)
 		printline = addPrevNNextWord(printline, prevWord, nextWord)
 		printline = addPrevNNextLemma(printline,prevLem,nextLem)
 		printline = addAllPrevNNextPOS(printline,prevFeats,nextFeats)
@@ -263,9 +235,6 @@ for line in annotation:
 		printline += '\t'+bBi # BACKWARD TRIGRAMS
 		printline += '\t'+bBiLem
 		# printline += '\t'+bBiPOS
-		""" ADD W2V FEATURES """		
-		#printline = addW2Vsims(printline, word, sims)
-		# printline = addW2VsimsLemmed(printline, lem, simsLemmed)
 		""" GAZETTEER FEATURES """
 		printline = useGazatteer(printline, word, gazList)
 		""" DOMAIN ADAPTATION """
@@ -277,6 +246,3 @@ for line in annotation:
 	
 		""" PRINT THAT JANK OUT """
 	print printline
-		
-	i += 1
-		

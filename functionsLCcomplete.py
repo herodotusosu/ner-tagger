@@ -180,7 +180,7 @@ def CompareGrpNPredGrp(grp, predGrp, strg):
 	print 'Spurious', strg+':', predNOTactual
 	print
 	print 'Correctly identified', str(len(correctlyPredicted))+'/'+str(len(act)), strg,'and spuriously generated', str(len(predNOTactual))
-	
+
 def getOutputDict(TP, FP, FN, TPunk, FPunk, FNunk, output, i):
 	totalPrec = 0
 	totalRec = 0
@@ -280,33 +280,30 @@ def getResults(PredTest, words, domains):
 						domain = d
 			pr = line.split()[1]
 			ac = line.split()[3]
-			if pr == '0' and ac == '0':
-				pass
+			if pr == ac:
+				if domain != None:
+					TPd[domain]['Totals'] += 1
+					TPd[domain][ac] += 1
+				TP[ac] += 1
+				TP['Totals'] += 1
+				if UNK == True:
+					if domain != None:
+						TPdunk[domain][ac] += 1
+						TPdunk[domain]['Totals'] += 1
+					TPunk[ac] += 1
+					TPunk['Totals'] += 1
 			else:
-				if pr == ac:
+				if domain != None:
+					FPd[domain][pr] += 1
+					FNd[domain][ac] += 1
+				FP[pr] += 1
+				FN[ac] += 1
+				if UNK == True:
 					if domain != None:
-						TPd[domain]['Totals'] += 1
-						TPd[domain][ac] += 1
-					TP[ac] += 1
-					TP['Totals'] += 1
-					if UNK == True:
-						if domain != None:
-							TPdunk[domain][ac] += 1
-							TPdunk[domain]['Totals'] += 1
-						TPunk[ac] += 1
-						TPunk['Totals'] += 1
-				else:
-					if domain != None:
-						FPd[domain][pr] += 1
-						FNd[domain][ac] += 1
-					FP[pr] += 1
-					FN[ac] += 1
-					if UNK == True:
-						if domain != None:
-							FPdunk[domain][pr] += 1
-							FNdunk[domain][ac] += 1
-						FPunk[pr] += 1
-						FNunk[ac] += 1
+						FPdunk[domain][pr] += 1
+						FNdunk[domain][ac] += 1
+					FPunk[pr] += 1
+					FNunk[ac] += 1
 	
 	### Pre Domains
 	list = getOutputDict(TP, FP, FN, TPunk, FPunk, FNunk, output, i)
@@ -323,6 +320,5 @@ def getResults(PredTest, words, domains):
 			list = getOutputDict(TPd[dom], FPd[dom], FNd[dom], TPdunk[dom], FPdunk[dom], FNdunk[dom], output, i)
 			output = list[0]
 			i = list[1]
-	
+
 	return output
-		
